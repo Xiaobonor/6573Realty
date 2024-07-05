@@ -77,37 +77,90 @@ class Room(EmbeddedDocument):
 
 
 class RentalProperty(Document):
+    # UUID
     uuid = UUIDField(primary_key=True, default=uuid.uuid4, required=True)
+
+    # Basic Info
     name = StringField(required=True)
     description = StringField(required=True)
     detailed_description = StringField(required=True)
     landlord = ReferenceField('User', required=True)
-    furniture = ListField(StringField(), required=True)
-    amenities = ListField(StringField(), required=True)
+
+    # Address
     address = StringField(required=True)
     floor_info = StringField(required=True)  # e.g., "3/5"
+
+    # Price
     rent_price = FloatField(required=True)
     negotiation = EmbeddedDocumentField(Negotiation, required=True)
+
+    # Property Type
     property_type = StringField(choices=['entire_home', 'studio', 'shared_room'], required=True)
     layout = StringField(choices=['1_room', '2_rooms', '3_rooms', '4_rooms'], required=True)
+    building_type = StringField(choices=['apartment', 'elevator_building', 'townhouse', 'villa'], required=True)
+
+    # Area
+    furniture = ListField(StringField(), required=True)
+    amenities = ListField(StringField(), required=True)
+    rent_includes = EmbeddedDocumentField(RentIncludes, required=True)
     allowances = EmbeddedDocumentListField(Allowance, required=True)
     features = ListField(StringField(choices=['allow_cooking', 'allow_pets', 'balcony']), required=True)
-    building_type = StringField(choices=['apartment', 'elevator_building', 'townhouse', 'villa'], required=True)
-    area = FloatField(required=True)
-    rent_includes = EmbeddedDocumentField(RentIncludes, required=True)
     decoration_style = StringField(required=True)
-    tenant_preferences = ListField(StringField(choices=['male_only', 'female_only', 'no_night_life', 'students_only', 'working_professionals_only', 'others']), required=True)
+    images = EmbeddedDocumentListField(Image, required=True)
+    rooms = EmbeddedDocumentListField(Room, required=True)
+
+    # Other
+    tenant_preferences = ListField(StringField(
+        choices=['male_only', 'female_only', 'no_night_life', 'students_only', 'working_professionals_only',
+                 'others']), required=True)
     community = StringField(required=True)
     min_lease_months = IntField(required=True)
     has_balcony = BooleanField(required=True)
     bathroom_info = StringField()  # Optional
     building_age = IntField()  # Optional
-    tags = ListField(StringField(), required=True)
+    display_tags = ListField(StringField(), required=True)
+    view_count = IntField(default=0, required=True)
+
+    # Timestamps
     created_at = DateTimeField(default=datetime.utcnow, required=True)
     last_updated_at = DateTimeField(default=datetime.utcnow, required=True)
     last_pushed_at = DateTimeField()
-    images = EmbeddedDocumentListField(Image, required=True)
-    view_count = IntField(default=0, required=True)
-    rooms = EmbeddedDocumentListField(Room, required=True)
 
     meta = {'collection': 'rental_properties'}
+
+    @classmethod
+    def create(cls, name, description, detailed_description, landlord, furniture, amenities, address, floor_info,
+               rent_price, negotiation, property_type, layout, allowances, features, building_type, area, rent_includes,
+               decoration_style, tenant_preferences, community, min_lease_months, has_balcony, images, rooms,
+               bathroom_info=None, building_age=None, display_tags=None):
+        rental_property = cls(
+            name=name,
+            description=description,
+            detailed_description=detailed_description,
+            landlord=landlord,
+            furniture=furniture,
+            amenities=amenities,
+            address=address,
+            floor_info=floor_info,
+            rent_price=rent_price,
+            negotiation=negotiation,
+            property_type=property_type,
+            layout=layout,
+            allowances=allowances,
+            features=features,
+            building_type=building_type,
+            area=area,
+            rent_includes=rent_includes,
+            decoration_style=decoration_style,
+            tenant_preferences=tenant_preferences,
+            community=community,
+            min_lease_months=min_lease_months,
+            has_balcony=has_balcony,
+            bathroom_info=bathroom_info,
+            building_age=building_age,
+            display_tags=display_tags or [],
+            images=images,
+            rooms=rooms
+        )
+        rental_property.save()
+        return rental_property
