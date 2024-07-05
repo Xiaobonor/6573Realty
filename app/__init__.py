@@ -53,6 +53,7 @@ def create_app():
 
     # Here to load blueprint
     from app.routes.auth import auth_bp
+    from app.routes.flash_messages import flash_message_bp
     from app.routes.index import index_bp
 
     # Here to initialize the app
@@ -64,6 +65,7 @@ def create_app():
 
     # Here to register blueprint
     app.register_blueprint(auth_bp, url_prefix='/auth')
+    app.register_blueprint(flash_message_bp, url_prefix='/api/v1')
     app.register_blueprint(index_bp)
 
     # Here to register sockets

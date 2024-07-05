@@ -33,19 +33,38 @@
 - **view_count**: 物件總瀏覽數（必須，預設為 0）
 - **last_updated_at**: 最後更新時間（必須，自動設置為當前時間）
 - **last_pushed_at**: 最後推送時間（非必須）
+- **rooms**: 房間詳細信息（必須，列表，包括房間類型、評分和標籤）
 
 ### 子模型
 
-#### Negotiation
+##### Room
+- **room_category**: 房間類型（必須，選項: [bedroom, bathroom, living_room, kitchen, dining_room, study, guest_room, laundry_room, garage, balcony, garden, hallway, exterior]）
+- **room_score**: 房間評分（必須，範圍 0 到 100）
+- **tags**: 房間標籤（必須，嵌入文檔）
+
+###### RoomTags
+- **floor**: 地板相關標籤（必須，列表）
+- **walls**: 牆壁相關標籤（必須，列表）
+- **view**: 景觀相關標籤（必須，列表）
+- **furniture**: 傢俱相關標籤（必須，列表）
+- **features**: 特徵標籤（必須，列表）
+- **appliances**: 家電相關標籤（必須，列表）
+- **lighting**: 照明相關標籤（必須，列表）
+- **decor**: 裝飾風格標籤（必須，列表）
+- **color_scheme**: 配色相關標籤（必須，列表）
+- **size**: 房間大小相關標籤（必須，列表）
+- **other**: 其他標籤（必須，列表）
+
+##### Negotiation
 - **allow**: 是否允許議價（必須）
 - **min_price**: 最低議價範圍（必須）
 - **max_price**: 最高議價範圍（必須）
 
-#### Allowance
+##### Allowance
 - **allow**: 是否允許（必須）
 - **additional_fee**: 額外費用（必須）
 
-#### RentIncludes
+##### RentIncludes
 - **electric**: 電費相關（必須，包含是否為台電、每度價格）
 - **internet**: 網路相關（必須，包含是否包含在租金內、上傳/下載速度、額外費用）
 - **water**: 水費相關（必須，包含是否包含在租金內、額外費用）
@@ -69,6 +88,6 @@
 - **included**: 是否包含在租金內（必須）
 - **additional_fee**: 額外費用（必須）
 
-#### Image
+##### Image
 - **url**: 圖片網址（必須）
 - **title**: 圖片標題（必須）

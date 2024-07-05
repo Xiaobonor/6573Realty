@@ -33,19 +33,38 @@
 - **view_count**: Total view count of the property (required, default 0)
 - **last_updated_at**: Last updated time (required, auto-set to current time)
 - **last_pushed_at**: Last pushed time (optional)
+- **rooms**: Room details (required, list of Room)
 
 ### Submodels
 
-#### Negotiation
+##### Room
+- **room_category**: Room category (required, choices: [bedroom, bathroom, living_room, kitchen, dining_room, study, guest_room, laundry_room, garage, balcony, garden, hallway, exterior])
+- **room_score**: Room score (required, range 0 to 100)
+- **tags**: Room tags (required, embedded document)
+
+###### RoomTags
+- **floor**: Floor tags (required, list)
+- **walls**: Walls tags (required, list)
+- **view**: View tags (required, list)
+- **furniture**: Furniture tags (required, list)
+- **features**: Features tags (required, list)
+- **appliances**: Appliances tags (required, list)
+- **lighting**: Lighting tags (required, list)
+- **decor**: Decor tags (required, list)
+- **color_scheme**: Color scheme tags (required, list)
+- **size**: Size tags (required, list)
+- **other**: Other tags (required, list)
+
+##### Negotiation
 - **allow**: Whether negotiation is allowed (required)
 - **min_price**: Minimum negotiation price (required)
 - **max_price**: Maximum negotiation price (required)
 
-#### Allowance
+##### Allowance
 - **allow**: Whether allowed (required)
 - **additional_fee**: Additional fee (required)
 
-#### RentIncludes
+##### RentIncludes
 - **electric**: Electric fee details (required, includes whether it's from TaiPower, price per unit)
 - **internet**: Internet details (required, includes whether included in rent, upload/download speed, additional fee)
 - **water**: Water fee details (required, includes whether included in rent, additional fee)
@@ -69,6 +88,6 @@
 - **included**: Whether included in rent (required)
 - **additional_fee**: Additional fee (required)
 
-#### Image
+##### Image
 - **url**: Image URL (required)
 - **title**: Image title (required)
