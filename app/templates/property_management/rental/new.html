@@ -108,6 +108,12 @@
             background-color: #f8d7da;
             border-color: #f5c6cb;
         }
+
+        .form-group .additional-fee,
+        .form-group .internet-speed,
+        .form-group .negotiation-price {
+            display: none;
+        }
     </style>
 </head>
 
@@ -124,14 +130,12 @@
             <div class="form-group">
                 <label for="description">簡述</label>
                 <input type="text" id="description" name="description" value="這是一個範例描述" required>
+                <div class="info">不填寫則由AI自動生成</div>
             </div>
             <div class="form-group">
                 <label for="detailed_description">詳細描述</label>
                 <textarea id="detailed_description" name="detailed_description" rows="4" required>這是一個範例的詳細描述</textarea>
-            </div>
-            <div class="form-group">
-                <label for="landlord">房東</label>
-                <input type="text" id="landlord" name="landlord" value="John Doe" required>
+                <div class="info">不填寫則由AI自動生成</div>
             </div>
             <div class="form-group">
                 <label for="area">坪數</label>
@@ -153,16 +157,22 @@
             <div class="form-group">
                 <label for="negotiation">議價</label>
                 <select id="negotiation" name="negotiation" required>
-                    <option value="true" selected>可議價</option>
-                    <option value="false">不可議價</option>
+                    <option value="true">可議價</option>
+                    <option value="false" selected>不可議價</option>
                 </select>
+                <div class="negotiation-price">
+                    <label for="min_price">最低價格</label>
+                    <input type="number" id="min_price" name="min_price" value="0">
+                    <label for="max_price">最高價格</label>
+                    <input type="number" id="max_price" name="max_price" value="0">
+                </div>
             </div>
             <div class="form-group">
                 <label for="property_type">房產類型</label>
                 <select id="property_type" name="property_type" required>
-                    <option value="entire_home" selected>整租</option>
-                    <option value="studio">單間</option>
-                    <option value="shared_room">合租</option>
+                    <option value="entire_home" selected>整層住家</option>
+                    <option value="studio">獨立套房</option>
+                    <option value="shared_room">雅房</option>
                 </select>
             </div>
             <div class="form-group">
@@ -179,29 +189,111 @@
                 <select id="building_type" name="building_type" required>
                     <option value="apartment" selected>公寓</option>
                     <option value="elevator_building">電梯大樓</option>
-                    <option value="townhouse">聯排別墅</option>
-                    <option value="villa">獨棟別墅</option>
+                    <option value="townhouse">透天厝</option>
+                    <option value="villa">別墅</option>
                 </select>
             </div>
             <div class="form-group">
                 <label for="furniture">家具</label>
-                <input type="text" id="furniture" name="furniture" value="沙發, 床, 書桌" required>
+                <select id="furniture" name="furniture" multiple required>
+                    <option value="sofa">沙發</option>
+                    <option value="bed">床</option>
+                    <option value="desk_chair">桌椅</option>
+                    <option value="dining_table">餐桌</option>
+                    <option value="wardrobe">衣櫃</option>
+                    <option value="bookshelf">書架</option>
+                    <option value="tv_stand">電視櫃</option>
+                    <option value="nightstand">床頭櫃</option>
+                    <option value="dresser">梳妝台</option>
+                    <option value="shoe_rack">鞋架</option>
+                </select>
             </div>
             <div class="form-group">
                 <label for="amenities">便利設施</label>
-                <input type="text" id="amenities" name="amenities" value="Wi-Fi, 洗衣機, 冰箱" required>
+                <select id="amenities" name="amenities" multiple required>
+                    <option value="wifi">Wi-Fi分享器</option>
+                    <option value="washing_machine">洗衣機</option>
+                    <option value="refrigerator">冰箱</option>
+                    <option value="water_heater">熱水器</option>
+                    <option value="microwave">微波爐</option>
+                    <option value="air_conditioner">冷氣</option>
+                    <option value="heater">暖氣</option>
+                    <option value="tv">電視</option>
+                    <option value="dishwasher">洗碗機</option>
+                    <option value="oven">烤箱</option>
+                    <option value="fan">電風扇</option>
+                    <option value="cooker_hood">油煙機</option>
+                    <option value="water_purifier">淨水器</option>
+                    <option value="air_purifier">空氣清淨機</option>
+                    <option value="fire_extinguisher">滅火器</option>
+                    <option value="smoke_detector">煙霧探測器</option>
+                    <option value="electric_stove">電磁爐</option>
+                </select>
             </div>
             <div class="form-group">
-                <label for="rent_includes">租金包含</label>
-                <input type="text" id="rent_includes" name="rent_includes" value="水電, 網路, 管理費" required>
+                <label for="electric">包含電費</label>
+                <select id="electric" name="electric" required>
+                    <option value="false">否</option>
+                    <option value="true" selected>是</option>
+                </select>
+                <div class="additional-fee">
+                    <label for="electric_price_per_unit">電費單價 (每單位)</label>
+                    <input type="number" id="electric_price_per_unit" name="electric_price_per_unit" value="0" required>
+                </div>
             </div>
             <div class="form-group">
-                <label for="allowances">額外費用</label>
-                <input type="text" id="allowances" name="allowances" value="1000" required>
+                <label for="internet">包含網路費</label>
+                <select id="internet" name="internet" required>
+                    <option value="false">否</option>
+                    <option value="true" selected>是</option>
+                </select>
+                <div class="additional-fee">
+                    <label for="internet_additional_fee">網路附加費用</label>
+                    <input type="number" id="internet_additional_fee" name="internet_additional_fee" value="0" required>
+                </div>
+                <div class="internet-speed">
+                    <label for="internet_download_speed">下載速度 (Mbps)</label>
+                    <input type="number" id="internet_download_speed" name="internet_download_speed" value="0" required>
+                    <label for="internet_upload_speed">上傳速度 (Mbps)</label>
+                    <input type="number" id="internet_upload_speed" name="internet_upload_speed" value="0" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="water">包含水費</label>
+                <select id="water" name="water" required>
+                    <option value="false">否</option>
+                    <option value="true" selected>是</option>
+                </select>
+                <div class="additional-fee">
+                    <label for="water_additional_fee">水費附加費用</label>
+                    <input type="number" id="water_additional_fee" name="water_additional_fee" value="0" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="management_fee">包含管理費</label>
+                <select id="management_fee" name="management_fee" required>
+                    <option value="false">否</option>
+                    <option value="true" selected>是</option>
+                </select>
+                <div class="additional-fee">
+                    <label for="management_fee_additional_fee">管理費附加費用</label>
+                    <input type="number" id="management_fee_additional_fee" name="management_fee_additional_fee" value="0" required>
+                </div>
             </div>
             <div class="form-group">
                 <label for="features">特色</label>
-                <input type="text" id="features" name="features" value="允許烹飪, 允許寵物, 陽台" required>
+                <select id="features" name="features" multiple required>
+                    <option value="allow_cooking">可開伙</option>
+                    <option value="allow_cats">可養貓</option>
+                    <option value="allow_dogs">可養狗</option>
+                    <option value="allow_other_pets">可養其他寵物</option>
+                    <option value="dry_wet_separation">乾濕分離</option>
+                    <option value="mother_son_parking">子母車</option>
+                    <option value="water_dispenser">飲水機</option>
+                    <option value="surveillance">監視器</option>
+                    <option value="elevator">電梯</option>
+                    <option value="access_control">門禁磁扣</option>
+                </select>
             </div>
             <div class="form-group">
                 <label for="decoration_style">裝修風格</label>
@@ -245,10 +337,6 @@
                 <label for="building_age">建築年齡(可選)</label>
                 <input type="number" id="building_age" name="building_age" value="5">
             </div>
-            <div class="form-group">
-                <label for="display_tags">顯示標籤</label>
-                <input type="text" id="display_tags" name="display_tags" value="標籤1, 標籤2" required>
-            </div>
             <div class="form-actions">
                 <button type="submit">
                     <i class="fas fa-paper-plane animated-icon"></i> 提交
@@ -257,11 +345,29 @@
         </form>
     </div>
     <script>
-        document.querySelector('button').addEventListener('mouseover', function () {
-            this.querySelector('.animated-icon').classList.add('fa-bounce');
-        });
-        document.querySelector('button').addEventListener('mouseout', function () {
-            this.querySelector('.animated-icon').classList.remove('fa-bounce');
+        document.querySelectorAll('select').forEach(select => {
+            select.addEventListener('change', function () {
+                const parent = this.closest('.form-group');
+                if (this.id === 'electric' || this.id === 'water' || this.id === 'management_fee') {
+                    if (this.value === 'false') {
+                        parent.querySelector('.additional-fee').style.display = 'block';
+                        if (this.id === 'internet') {
+                            parent.querySelector('.internet-speed').style.display = 'block';
+                        }
+                    } else {
+                        parent.querySelector('.additional-fee').style.display = 'none';
+                        if (this.id === 'internet') {
+                            parent.querySelector('.internet-speed').style.display = 'none';
+                        }
+                    }
+                } else if (this.id === 'negotiation') {
+                    if (this.value === 'true') {
+                        parent.querySelector('.negotiation-price').style.display = 'block';
+                    } else {
+                        parent.querySelector('.negotiation-price').style.display = 'none';
+                    }
+                }
+            });
         });
 
         async function compressImage(file) {
@@ -271,8 +377,8 @@
 
             return new Promise((resolve, reject) => {
                 img.onload = () => {
-                    const width = img.width;
-                    const height = img.height;
+                    let width = img.width;
+                    let height = img.height;
 
                     const max_size = 1024;
                     if (width > height) {
@@ -312,59 +418,72 @@
             });
         }
 
-document.getElementById('property-form').addEventListener('submit', async function (event) {
-    event.preventDefault();
+        document.getElementById('property-form').addEventListener('submit', async function (event) {
+            event.preventDefault();
 
-    const formData = new FormData(this);
-    const alertSuccess = document.getElementById('alert-success');
-    const alertError = document.getElementById('alert-error');
-    const files = formData.getAll('images');
+            const formData = new FormData(this);
+            const alertSuccess = document.getElementById('alert-success');
+            const alertError = document.getElementById('alert-error');
+            const files = formData.getAll('images');
 
-    try {
-        const compressedFilesPromises = files.map(async file => {
-            if (file.size > 5 * 1024 * 1024) {
-                const compressedBlob = await compressImage(file);
-                return new File([compressedBlob], file.name, { type: 'image/jpeg' });
+            try {
+                const compressedFilesPromises = files.map(async file => {
+                    if (file.size > 5 * 1024 * 1024) {
+                        const compressedBlob = await compressImage(file);
+                        return new File([compressedBlob], file.name, { type: 'image/jpeg' });
+                    }
+                    return file;
+                });
+
+                const compressedFiles = await Promise.all(compressedFilesPromises);
+
+                const base64FilesPromises = compressedFiles.map(file => fileToBase64(file));
+                const base64Files = await Promise.all(base64FilesPromises);
+
+                formData.delete('images');
+                base64Files.forEach((base64, index) => {
+                    formData.append('images', base64);
+                });
+
+                const response = await fetch('/api/v1/rent/management/new', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    alertSuccess.textContent = '租屋物件建立成功!';
+                    alertSuccess.style.display = 'block';
+                    alertError.style.display = 'none';
+                    setTimeout(() => {
+                        window.location.href = result.redirect_url;
+                    }, 2000);
+                } else {
+                    alertError.textContent = `建立租屋物件時發生錯誤: ${result.error}`;
+                    alertError.style.display = 'block';
+                    alertSuccess.style.display = 'none';
+                }
+            } catch (error) {
+                alertError.textContent = `建立租屋物件時發生錯誤: ${error.message}`;
+                alertError.style.display = 'block';
+                alertSuccess.style.display = 'none';
             }
-            return file;
         });
 
-        const compressedFiles = await Promise.all(compressedFilesPromises);
-
-        const base64FilesPromises = compressedFiles.map(file => fileToBase64(file));
-        const base64Files = await Promise.all(base64FilesPromises);
-
-        formData.delete('images');
-        base64Files.forEach((base64, index) => {
-            formData.append('images', base64);  // 修改這一行，使所有圖片都附加到 'images' 字段中
+        // 初始化時檢查各選項狀態
+        document.querySelectorAll('select').forEach(select => {
+            const parent = select.closest('.form-group');
+            if (select.value === 'false') {
+                parent.querySelector('.additional-fee').style.display = 'block';
+                if (select.id === 'internet') {
+                    parent.querySelector('.internet-speed').style.display = 'block';
+                }
+            }
+            if (select.id === 'negotiation' && select.value === 'true') {
+                parent.querySelector('.negotiation-price').style.display = 'block';
+            }
         });
-
-        const response = await fetch('/api/v1/rent/management/new', {
-            method: 'POST',
-            body: formData
-        });
-
-        const result = await response.json();
-
-        if (result.success) {
-            alertSuccess.textContent = '租屋物件建立成功!';
-            alertSuccess.style.display = 'block';
-            alertError.style.display = 'none';
-            setTimeout(() => {
-                window.location.href = result.redirect_url;
-            }, 2000);
-        } else {
-            alertError.textContent = `建立租屋物件時發生錯誤: ${result.error}`;
-            alertError.style.display = 'block';
-            alertSuccess.style.display = 'none';
-        }
-    } catch (error) {
-        alertError.textContent = `建立租屋物件時發生錯誤: ${error.message}`;
-        alertError.style.display = 'block';
-        alertSuccess.style.display = 'none';
-    }
-});
-
     </script>
 </body>
 

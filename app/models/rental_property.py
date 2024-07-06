@@ -114,7 +114,7 @@ class RentalProperty(Document):
     has_balcony = BooleanField(required=True)
     bathroom_info = StringField()  # Optional
     building_age = IntField()  # Optional
-    display_tags = ListField(StringField(), required=True)
+    display_tags = ListField(StringField())
     view_count = IntField(default=0, required=True)
 
     # Timestamps

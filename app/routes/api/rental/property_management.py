@@ -2,7 +2,7 @@
 import asyncio
 from flask import Blueprint, request, session, flash, jsonify, redirect, url_for
 from app.utils.auth_utils import login_required
-from app.models.rental_property import (RentalProperty, Negotiation, Allowance, RentIncludes, Electric, Internet, Water,
+from app.models.rental_property import (RentalProperty, Negotiation, RentIncludes, Electric, Internet, Water,
                                         ManagementFee, Room, RoomTags)
 from app.utils.agents.chat.image_tag import image_tag
 
@@ -101,8 +101,7 @@ def create_property():
             images=base64s,
             rooms=rooms,
             bathroom_info=data.get('bathroom_info', [None])[0],
-            building_age=int(data.get('building_age', [0])[0]),
-            display_tags=[]  # Display tags are now handled automatically
+            building_age=int(data.get('building_age', [0])[0])
         )
 
         print("Property created: ", rental_property.id)
