@@ -1,186 +1,14 @@
+<!-- app/templates/property_management/rental/view.html -->
 <!DOCTYPE html>
 <html lang="zh-TW">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>房屋展示</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f9;
-            color: #333;
-        }
-
-        .header {
-            text-align: center;
-            padding: 20px;
-            background: #fff;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-        }
-
-        .title-container {
-            text-align: center;
-            padding: 20px;
-            background: #fff;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-            max-width: 1200px;
-            margin: 20px auto;
-        }
-
-        .content {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-            padding: 20px;
-            max-width: 1200px;
-            margin: auto;
-        }
-
-        .image-gallery {
-            flex: 1;
-            max-width: 60%;
-            margin: 10px;
-            position: relative;
-            max-height: 500px;
-            overflow: hidden;
-        }
-
-        .image-gallery img {
-            width: 100%;
-            border-radius: 15px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .image-gallery .left,
-        .image-gallery .right {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(0, 0, 0, 0.5);
-            color: #fff;
-            padding: 10px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-
-        .image-gallery .left {
-            left: 0;
-        }
-
-        .image-gallery .right {
-            right: 0;
-        }
-
-        .image-gallery .dots {
-            text-align: center;
-            margin-top: 10px;
-            position: absolute;
-            bottom: 10px;
-            width: 100%;
-        }
-
-        .image-gallery .dots span {
-            display: inline-block;
-            width: 10px;
-            height: 10px;
-            background: #bbb;
-            margin: 5px;
-            border-radius: 50%;
-            cursor: pointer;
-        }
-
-        .image-gallery .dots .active {
-            background: #007bff;
-        }
-
-        .details {
-            flex: 1;
-            max-width: 35%;
-            margin: 10px;
-            background: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .details h2 {
-            margin-top: 0;
-            font-size: 24px;
-            color: #333;
-        }
-
-        .details p {
-            color: #666;
-            line-height: 1.6;
-        }
-
-        .info-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .info-grid div {
-            background: #f9f9f9;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .info-grid div h3 {
-            margin: 0 0 10px 0;
-            color: #333;
-        }
-
-        .info-grid div p {
-            margin: 0;
-            color: #666;
-            line-height: 1.6;
-        }
-
-        .icon-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .icon-list .icon-item {
-            flex: 1 1 20%;
-            text-align: center;
-        }
-
-        .icon-list .icon-item i {
-            font-size: 24px;
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        .icon-list .icon-item span {
-            font-size: 14px;
-        }
-
-        .furniture-container,
-        .amenities-container {
-            margin: 20px 0;
-            max-width: 100%;
-            padding: 20px;
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='property_management/view/style.css') }}">
 </head>
-
 <body>
-
     <div class="header">
         <h1 id="property-name"></h1>
     </div>
@@ -197,6 +25,7 @@
             <p id="detailed-description"></p>
             <h2>出租人</h2>
             <p id="landlord"></p>
+            <button onclick="contactLandlord()">聯繫出租人（Line）</button>
 
             <div class="info-grid">
                 <div>
@@ -354,14 +183,6 @@
                     <span>風扇</span>
                 </div>
                 <div class="icon-item">
-                    <i class="fas fa-wind" id="cooker_hood"></i>
-                    <span>排油煙機</span>
-                </div>
-                <div class="icon-item">
-                    <i class="fas fa-water" id="water_purifier"></i>
-                    <span>濾水器</span>
-                </div>
-                <div class="icon-item">
                     <i class="fas fa-air-freshener" id="air_purifier"></i>
                     <span>空氣清淨機</span>
                 </div>
@@ -380,85 +201,9 @@
             </div>
         </div>
     </div>
-
-    <script>
-        const propertyData = {{ property_data | tojson }};
-
-        let currentImageIndex = 0;
-
-        document.getElementById('property-name').innerText = propertyData.name;
-        document.getElementById('detailed-description').innerText = propertyData.detailed_description;
-        document.getElementById('landlord').innerText = propertyData.landlord;
-        document.getElementById('address').innerText = propertyData.address;
-        document.getElementById('floor-info').innerText = propertyData.floor_info;
-        document.getElementById('rent-price').innerText = propertyData.rent_price + ' 元/月';
-        document.getElementById('deposit').innerText = propertyData.deposit + ' 元';
-        document.getElementById('property-type').innerText = propertyData.property_type;
-        document.getElementById('layout').innerText = propertyData.layout;
-        document.getElementById('building-type').innerText = propertyData.building_type;
-        document.getElementById('area').innerText = propertyData.area + ' 坪';
-        document.getElementById('decoration-style').innerText = propertyData.decoration_style;
-        document.getElementById('min-lease-months').innerText = propertyData.min_lease_months + ' 個月';
-        document.getElementById('has-balcony').innerText = propertyData.has_balcony ? '是' : '否';
-        document.getElementById('view-count').innerText = propertyData.view_count + ' 次';
-        document.getElementById('created-at').innerText = new Date(propertyData.created_at).toLocaleString('zh-TW');
-        document.getElementById('last-updated-at').innerText = new Date(propertyData.last_updated_at).toLocaleString('zh-TW');
-
-        const imageGallery = document.getElementById('image-gallery');
-        const dots = document.getElementById('dots');
-        propertyData.images.forEach((base64Image, index) => {
-            const img = document.createElement('img');
-            img.src = base64Image;
-            img.style.display = index === 0 ? 'block' : 'none';
-            imageGallery.appendChild(img);
-
-            const dot = document.createElement('span');
-            dot.className = index === 0 ? 'active' : '';
-            dot.onclick = () => showImage(index);
-            dots.appendChild(dot);
-        });
-
-        function showImage(index) {
-            const images = imageGallery.querySelectorAll('img');
-            const dotElements = dots.querySelectorAll('span');
-            images[currentImageIndex].style.display = 'none';
-            dotElements[currentImageIndex].classList.remove('active');
-            images[index].style.display = 'block';
-            dotElements[index].classList.add('active');
-            currentImageIndex = index;
-        }
-
-        function prevImage() {
-            const newIndex = (currentImageIndex - 1 + propertyData.images.length) % propertyData.images.length;
-            showImage(newIndex);
-        }
-
-        function nextImage() {
-            const newIndex = (currentImageIndex + 1) % propertyData.images.length;
-            showImage(newIndex);
-        }
-
-        function updateIconAvailability(items, itemType) {
-            items.forEach(item => {
-                document.getElementById(item).style.color = '#000';
-            });
-
-            const allItems = {
-                furniture: ['sofa', 'bed', 'desk_chair', 'dining_table', 'wardrobe', 'bookshelf', 'tv_stand', 'nightstand', 'dresser', 'shoe_rack'],
-                amenities: ['wifi', 'washing_machine', 'refrigerator', 'water_heater', 'microwave', 'air_conditioner', 'heater', 'tv', 'dishwasher', 'oven', 'fan', 'cooker_hood', 'water_purifier', 'air_purifier', 'fire_extinguisher', 'smoke_detector', 'electric_stove']
-            };
-
-            allItems[itemType].forEach(item => {
-                if (!items.includes(item)) {
-                    document.getElementById(item).style.color = '#ccc';
-                }
-            });
-        }
-
-        updateIconAvailability(propertyData.furniture, 'furniture');
-        updateIconAvailability(propertyData.amenities, 'amenities');
-    </script>
-
+<script>
+    const propertyData = {{ property_data | tojson }};
+</script>
+<script src="{{ url_for('static', filename='property_management/view/script.js') }}"></script>
 </body>
-
 </html>
