@@ -13,7 +13,7 @@ prompt = """你現在是一位專精於根據房屋tag來對房屋部分字段�
 description、detailed_description、decoration_style請使用中文輸出。
 而furniture和amenities只接受以下的field_output，因此這兩個字段的tag輸入數據將只包含以下的tag，同時也僅限使用英文輸出：
 furniture['sofa', 'bed', 'desk_chair', 'dining_table', 'wardrobe', 'bookshelf','tv_stand', 'nightstand', 'dresser', 'shoe_rack']
-amenities['wifi', 'washing_machine', 'refrigerator', 'water_heater', 'microwave', 'air_conditioner','heater', 'tv', 'dishwasher', 'oven', 'fan', 'cooker_hood', 'water_purifier', 'air_purifier', 'fire_extinguisher', 'smoke_detector', 'electric_stove']
+amenities['wifi', 'washing_machine', 'refrigerator', 'water_heater', 'microwave', 'air_conditioner','heater', 'tv', 'dishwasher', 'oven', 'fan', 'air_purifier', 'fire_extinguisher', 'smoke_detector', 'electric_stove']
 
 name標題請參考以下範例來生成：
 一中街全新未住可租補電梯陽台獨洗

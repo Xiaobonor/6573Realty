@@ -14,14 +14,18 @@ from authlib.integrations.flask_client import OAuth
 from openai import AsyncAzureOpenAI, AsyncOpenAI
 from redis import Redis
 
+import torch
+
 socketio = SocketIO()
 cors = CORS()
 oauth = OAuth()
 openai = None
+device = None
 
 
 def create_app():
     global openai
+    global device
     load_dotenv()
 
     # App configuration
@@ -66,6 +70,10 @@ def create_app():
     socketio.init_app(app)
     oauth.init_app(app)
     cors.init_app(app)
+    if os.getenv('TORCH_DEVICE') == 'cuda':
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    else:
+        device = torch.device("cpu")
 
     # Here to register blueprint
     app.register_blueprint(auth_bp, url_prefix='/auth')

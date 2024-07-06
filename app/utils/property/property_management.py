@@ -4,6 +4,7 @@ from app.models.rental_property import (Negotiation, RentIncludes, Electric, Int
 from app.models.tags import Tag
 from app.utils.agents.chat.image_tag import image_tag
 from app.utils.agents.chat.tag_fields_generated import tag_fields_generated
+from app.utils.algorithm.tag_algorithm import remove_hash, get_bert_vectors, get_tfidf_vectors
 
 
 def create_negotiation(data):
@@ -104,10 +105,14 @@ async def generate_tags_and_fields(base64s, data):
 
     Tag.in_related_tags("allTags", list(all_tags))
 
-    return generated_fields, rooms
+    return generated_fields, rooms, list(all_tags)
 
 
-def create_rental_property(data, landlord, negotiation, rent_includes, generated_fields, rooms, base64s):
+def create_rental_property(data, landlord, negotiation, rent_includes, generated_fields, rooms, base64s, all_tags):
+    # Calculate BERT and TF-IDF vectors for tags
+    bert_vectors = get_bert_vectors(remove_hash(all_tags))
+    tfidf_vectors = get_tfidf_vectors(all_tags)
+
     return RentalProperty.create(
         name=generated_fields.get('name') or data.get('name', [''])[0],
         description=generated_fields.get('description') or data.get('description', [''])[0],
@@ -133,5 +138,7 @@ def create_rental_property(data, landlord, negotiation, rent_includes, generated
         has_balcony=data.get('has_balcony', [generated_fields.get('has_balcony', '')])[0] == 'true',
         images=base64s,
         rooms=rooms,
+        bert_vectors=bert_vectors.tolist(),
+        tfidf_vectors=tfidf_vectors.tolist(),
         building_age=int(data.get('building_age', [0])[0])
     )
