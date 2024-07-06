@@ -11,37 +11,47 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             background-color: #f5f5f5;
             margin: 0;
-            padding: 0;
+            padding: 20px;
             display: flex;
             justify-content: center;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
+            align-items: flex-start;
+            min-height: 100vh;
+            box-sizing: border-box;
         }
 
         .container {
             background: #ffffff;
-            padding: 20px 40px;
+            padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             width: 100%;
-            max-width: 600px;
-            max-height: 90vh;
-            overflow-y: auto;
+            max-width: 1200px;
+            display: flex;
+            gap: 20px;
+        }
+
+        .left-column,
+        .right-column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
 
         .container h2 {
             text-align: center;
+            width: 100%;
             margin-bottom: 20px;
             color: #333;
         }
 
         .form-group {
+            display: flex;
+            flex-direction: column;
             margin-bottom: 15px;
         }
 
         .form-group label {
-            display: block;
             margin-bottom: 5px;
             color: #555;
         }
@@ -49,7 +59,6 @@
         .form-group input,
         .form-group select,
         .form-group textarea {
-            width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
@@ -68,7 +77,9 @@
         }
 
         .form-actions {
-            text-align: center;
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
         }
 
         .form-actions button {
@@ -83,10 +94,6 @@
 
         .form-actions button:hover {
             background-color: #005bb5;
-        }
-
-        .animated-icon {
-            margin-right: 8px;
         }
 
         .alert {
@@ -109,246 +116,403 @@
             border-color: #f5c6cb;
         }
 
-        .form-group .additional-fee,
-        .form-group .internet-speed,
-        .form-group .negotiation-price {
-            display: none;
+        .image-upload-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .image-upload-preview {
+            width: 100%;
+            max-width: 600px;
+            height: 400px;
+            background: #eaeaea;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .image-upload-preview img {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 10px;
+        }
+
+        .image-upload-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .image-upload-controls button {
+            background-color: #007aff;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .image-upload-controls button:hover {
+            background-color: #005bb5;
+        }
+
+        .image-upload-controls button i {
+            margin-right: 5px;
+        }
+
+        .remove-image-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.3s;
+        }
+
+        .remove-image-btn:hover {
+            background: rgba(0, 0, 0, 0.7);
         }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <h2>租賃房產資訊填寫</h2>
         <div id="alert-success" class="alert alert-success">提交成功！</div>
         <div id="alert-error" class="alert alert-error">提交失敗，請重試。</div>
-        <form id="property-form">
-            <div class="form-group">
-                <label for="name">名稱</label>
-                <input type="text" id="name" name="name" value="範例房產名稱" required>
-            </div>
-            <div class="form-group">
-                <label for="description">簡述</label>
-                <input type="text" id="description" name="description" value="這是一個範例描述" required>
-                <div class="info">不填寫則由AI自動生成</div>
-            </div>
-            <div class="form-group">
-                <label for="detailed_description">詳細描述</label>
-                <textarea id="detailed_description" name="detailed_description" rows="4" required>這是一個範例的詳細描述</textarea>
-                <div class="info">不填寫則由AI自動生成</div>
-            </div>
-            <div class="form-group">
-                <label for="area">坪數</label>
-                <input type="number" id="area" name="area" value="10" required>
-            </div>
-            <div class="form-group">
-                <label for="address">地址</label>
-                <input type="text" id="address" name="address" value="範例地址 123號" required>
-            </div>
-            <div class="form-group">
-                <label for="floor_info">樓層資訊</label>
-                <input type="text" id="floor_info" name="floor_info" value="3/5" required>
-                <div class="info">例如: "3/5" 表示五層樓中的第三層</div>
-            </div>
-            <div class="form-group">
-                <label for="rent_price">租金價格</label>
-                <input type="number" id="rent_price" name="rent_price" value="1000" required>
-            </div>
-            <div class="form-group">
-                <label for="negotiation">議價</label>
-                <select id="negotiation" name="negotiation" required>
-                    <option value="true">可議價</option>
-                    <option value="false" selected>不可議價</option>
-                </select>
-                <div class="negotiation-price">
-                    <label for="min_price">最低價格</label>
-                    <input type="number" id="min_price" name="min_price" value="0">
-                    <label for="max_price">最高價格</label>
-                    <input type="number" id="max_price" name="max_price" value="0">
+        <div class="left-column">
+            <form id="property-form">
+                <div class="form-group">
+                    <label for="name">名稱 *</label>
+                    <input type="text" id="name" name="name" value="範例房產名稱" required>
+                </div>
+                <div class="form-group">
+                    <label for="description">簡述</label>
+                    <input type="text" id="description" name="description" value="這是一個範例描述">
+                    <div class="info">不填寫則由AI自動生成</div>
+                </div>
+                <div class="form-group">
+                    <label for="detailed_description">詳細描述</label>
+                    <textarea id="detailed_description" name="detailed_description" rows="4">這是一個範例的詳細描述</textarea>
+                    <div class="info">不填寫則由AI自動生成</div>
+                </div>
+                <div class="form-group">
+                    <label for="area">坪數 *</label>
+                    <input type="number" id="area" name="area" value="10" required>
+                </div>
+                <div class="form-group">
+                    <label for="address">地址 *</label>
+                    <input type="text" id="address" name="address" value="範例地址 123號" required>
+                </div>
+                <div class="form-group">
+                    <label for="floor_info">樓層資訊 *</label>
+                    <input type="text" id="floor_info" name="floor_info" value="3/5" required>
+                    <div class="info">例如: "3/5" 表示五層樓中的第三層</div>
+                </div>
+                <div class="form-group">
+                    <label for="rent_price">租金價格 *</label>
+                    <input type="number" id="rent_price" name="rent_price" value="1000" required>
+                </div>
+                <div class="form-group">
+                    <label for="negotiation">議價 *</label>
+                    <select id="negotiation" name="negotiation" required>
+                        <option value="true">可議價</option>
+                        <option value="false" selected>不可議價</option>
+                    </select>
+                    <div class="negotiation-price">
+                        <label for="min_price">最低價格</label>
+                        <input type="number" id="min_price" name="min_price" value="0">
+                        <label for="max_price">最高價格</label>
+                        <input type="number" id="max_price" name="max_price" value="0">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="property_type">房產類型 *</label>
+                    <select id="property_type" name="property_type" required>
+                        <option value="entire_home" selected>整層住家</option>
+                        <option value="studio">獨立套房</option>
+                        <option value="shared_room">雅房</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="layout">房型 *</label>
+                    <select id="layout" name="layout" required>
+                        <option value="1_room">一室</option>
+                        <option value="2_rooms" selected>兩室</option>
+                        <option value="3_rooms">三室</option>
+                        <option value="4_rooms">四室</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="building_type">建築類型 *</label>
+                    <select id="building_type" name="building_type" required>
+                        <option value="apartment" selected>公寓</option>
+                        <option value="elevator_building">電梯大樓</option>
+                        <option value="townhouse">透天厝</option>
+                        <option value="villa">別墅</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="furniture">家具</label>
+                    <select id="furniture" name="furniture" multiple>
+                        <option value="sofa">沙發</option>
+                        <option value="bed">床</option>
+                        <option value="desk_chair">桌椅</option>
+                        <option value="dining_table">餐桌</option>
+                        <option value="wardrobe">衣櫃</option>
+                        <option value="bookshelf">書架</option>
+                        <option value="tv_stand">電視櫃</option>
+                        <option value="nightstand">床頭櫃</option>
+                        <option value="dresser">梳妝台</option>
+                        <option value="shoe_rack">鞋架</option>
+                    </select>
+                    <div class="info">不填寫則由AI自動生成</div>
+                </div>
+                <div class="form-group">
+                    <label for="amenities">便利設施</label>
+                    <select id="amenities" name="amenities" multiple>
+                        <option value="wifi">Wi-Fi分享器</option>
+                        <option value="washing_machine">洗衣機</option>
+                        <option value="refrigerator">冰箱</option>
+                        <option value="water_heater">熱水器</option>
+                        <option value="microwave">微波爐</option>
+                        <option value="air_conditioner">冷氣</option>
+                        <option value="heater">暖氣</option>
+                        <option value="tv">電視</option>
+                        <option value="dishwasher">洗碗機</option>
+                        <option value="oven">烤箱</option>
+                        <option value="fan">電風扇</option>
+                        <option value="cooker_hood">油煙機</option>
+                        <option value="water_purifier">淨水器</option>
+                        <option value="air_purifier">空氣清淨機</option>
+                        <option value="fire_extinguisher">滅火器</option>
+                        <option value="smoke_detector">煙霧探測器</option>
+                        <option value="electric_stove">電磁爐</option>
+                    </select>
+                    <div class="info">不填寫則由AI自動生成</div>
+                </div>
+                <div class="form-group">
+                    <label for="electric">包含電費 *</label>
+                    <select id="electric" name="electric" required>
+                        <option value="false">否</option>
+                        <option value="true" selected>是</option>
+                    </select>
+                    <div class="additional-fee">
+                        <label for="electric_price_per_unit">電費單價 (每單位)</label>
+                        <input type="number" id="electric_price_per_unit" name="electric_price_per_unit" value="0" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="internet">包含網路費 *</label>
+                    <select id="internet" name="internet" required>
+                        <option value="false">否</option>
+                        <option value="true" selected>是</option>
+                    </select>
+                    <div class="additional-fee">
+                        <label for="internet_additional_fee">網路附加費用</label>
+                        <input type="number" id="internet_additional_fee" name="internet_additional_fee" value="0" required>
+                    </div>
+                    <div class="internet-speed">
+                        <label for="internet_download_speed">下載速度 (Mbps)</label>
+                        <input type="number" id="internet_download_speed" name="internet_download_speed" value="0" required>
+                        <label for="internet_upload_speed">上傳速度 (Mbps)</label>
+                        <input type="number" id="internet_upload_speed" name="internet_upload_speed" value="0" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="water">包含水費 *</label>
+                    <select id="water" name="water" required>
+                        <option value="false">否</option>
+                        <option value="true" selected>是</option>
+                    </select>
+                    <div class="additional-fee">
+                        <label for="water_additional_fee">水費附加費用</label>
+                        <input type="number" id="water_additional_fee" name="water_additional_fee" value="0" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="management_fee">包含管理費 *</label>
+                    <select id="management_fee" name="management_fee" required>
+                        <option value="false">否</option>
+                        <option value="true" selected>是</option>
+                    </select>
+                    <div class="additional-fee">
+                        <label for="management_fee_additional_fee">管理費附加費用</label>
+                        <input type="number" id="management_fee_additional_fee" name="management_fee_additional_fee" value="0" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="features">特色 *</label>
+                    <select id="features" name="features" multiple required>
+                        <option value="allow_cooking">可開伙</option>
+                        <option value="allow_cats">可養貓</option>
+                        <option value="allow_dogs">可養狗</option>
+                        <option value="allow_other_pets">可養其他寵物</option>
+                        <option value="dry_wet_separation">乾濕分離</option>
+                        <option value="mother_son_parking">子母車</option>
+                        <option value="water_dispenser">飲水機</option>
+                        <option value="surveillance">監視器</option>
+                        <option value="elevator">電梯</option>
+                        <option value="access_control">門禁磁扣</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="decoration_style">裝修風格</label>
+                    <input type="text" id="decoration_style" name="decoration_style" value="現代">
+                    <div class="info">不填寫則由AI自動生成</div>
+                </div>
+                <div class="form-group">
+                    <label for="tenant_preferences">租客偏好 *</label>
+                    <select id="tenant_preferences" name="tenant_preferences" multiple required>
+                        <option value="male_only">僅限男性</option>
+                        <option value="female_only">僅限女性</option>
+                        <option value="no_night_life">不接受夜生活</option>
+                        <option value="students_only" selected>僅限學生</option>
+                        <option value="working_professionals_only">僅限職業人士</option>
+                        <option value="others">其他</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="community">社區 *</label>
+                    <input type="text" id="community" name="community" value="範例社區" required>
+                </div>
+                <div class="form-group">
+                    <label for="min_lease_months">最短租期(月) *</label>
+                    <input type="number" id="min_lease_months" name="min_lease_months" value="6" required>
+                </div>
+                <div class="form-group">
+                    <label for="has_balcony">是否有陽台</label>
+                    <select id="has_balcony" name="has_balcony">
+                        <option value="true" selected>有</option>
+                        <option value="false">無</option>
+                    </select>
+                    <div class="info">不填寫則由AI自動生成</div>
+                </div>
+                <div class="form-group">
+                    <label for="bathroom_info">浴室資訊(可選)</label>
+                    <input type="text" id="bathroom_info" name="bathroom_info" value="一個浴室">
+                </div>
+                <div class="form-group">
+                    <label for="building_age">建築年齡(可選)</label>
+                    <input type="number" id="building_age" name="building_age" value="5">
+                </div>
+                <div class="collapsible">
+                    <div class="collapsible-header">
+                        <span>展開以填寫更多資訊</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="collapsible-content">
+                        <div class="form-group">
+                            <label for="additional_info_1">附加資訊1</label>
+                            <input type="text" id="additional_info_1" name="additional_info_1">
+                        </div>
+                        <div class="form-group">
+                            <label for="additional_info_2">附加資訊2</label>
+                            <input type="text" id="additional_info_2" name="additional_info_2">
+                        </div>
+                        <!-- 在此處添加更多可選填寫的項目 -->
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit">
+                        <i class="fas fa-paper-plane animated-icon"></i> 提交
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="right-column">
+            <div class="image-upload-container">
+                <div class="image-upload-preview">
+                    <img id="current-image" src="" alt="目前上傳的圖片">
+                    <button class="remove-image-btn" onclick="removeImage()"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="image-upload-controls">
+                    <button id="prev-image" onclick="prevImage()"><i class="fas fa-chevron-left"></i> 前一張</button>
+                    <button id="next-image" onclick="nextImage()">下一張 <i class="fas fa-chevron-right"></i></button>
                 </div>
             </div>
             <div class="form-group">
-                <label for="property_type">房產類型</label>
-                <select id="property_type" name="property_type" required>
-                    <option value="entire_home" selected>整層住家</option>
-                    <option value="studio">獨立套房</option>
-                    <option value="shared_room">雅房</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="layout">房型</label>
-                <select id="layout" name="layout" required>
-                    <option value="1_room">一室</option>
-                    <option value="2_rooms" selected>兩室</option>
-                    <option value="3_rooms">三室</option>
-                    <option value="4_rooms">四室</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="building_type">建築類型</label>
-                <select id="building_type" name="building_type" required>
-                    <option value="apartment" selected>公寓</option>
-                    <option value="elevator_building">電梯大樓</option>
-                    <option value="townhouse">透天厝</option>
-                    <option value="villa">別墅</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="furniture">家具</label>
-                <select id="furniture" name="furniture" multiple required>
-                    <option value="sofa">沙發</option>
-                    <option value="bed">床</option>
-                    <option value="desk_chair">桌椅</option>
-                    <option value="dining_table">餐桌</option>
-                    <option value="wardrobe">衣櫃</option>
-                    <option value="bookshelf">書架</option>
-                    <option value="tv_stand">電視櫃</option>
-                    <option value="nightstand">床頭櫃</option>
-                    <option value="dresser">梳妝台</option>
-                    <option value="shoe_rack">鞋架</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="amenities">便利設施</label>
-                <select id="amenities" name="amenities" multiple required>
-                    <option value="wifi">Wi-Fi分享器</option>
-                    <option value="washing_machine">洗衣機</option>
-                    <option value="refrigerator">冰箱</option>
-                    <option value="water_heater">熱水器</option>
-                    <option value="microwave">微波爐</option>
-                    <option value="air_conditioner">冷氣</option>
-                    <option value="heater">暖氣</option>
-                    <option value="tv">電視</option>
-                    <option value="dishwasher">洗碗機</option>
-                    <option value="oven">烤箱</option>
-                    <option value="fan">電風扇</option>
-                    <option value="cooker_hood">油煙機</option>
-                    <option value="water_purifier">淨水器</option>
-                    <option value="air_purifier">空氣清淨機</option>
-                    <option value="fire_extinguisher">滅火器</option>
-                    <option value="smoke_detector">煙霧探測器</option>
-                    <option value="electric_stove">電磁爐</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="electric">包含電費</label>
-                <select id="electric" name="electric" required>
-                    <option value="false">否</option>
-                    <option value="true" selected>是</option>
-                </select>
-                <div class="additional-fee">
-                    <label for="electric_price_per_unit">電費單價 (每單位)</label>
-                    <input type="number" id="electric_price_per_unit" name="electric_price_per_unit" value="0" required>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="internet">包含網路費</label>
-                <select id="internet" name="internet" required>
-                    <option value="false">否</option>
-                    <option value="true" selected>是</option>
-                </select>
-                <div class="additional-fee">
-                    <label for="internet_additional_fee">網路附加費用</label>
-                    <input type="number" id="internet_additional_fee" name="internet_additional_fee" value="0" required>
-                </div>
-                <div class="internet-speed">
-                    <label for="internet_download_speed">下載速度 (Mbps)</label>
-                    <input type="number" id="internet_download_speed" name="internet_download_speed" value="0" required>
-                    <label for="internet_upload_speed">上傳速度 (Mbps)</label>
-                    <input type="number" id="internet_upload_speed" name="internet_upload_speed" value="0" required>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="water">包含水費</label>
-                <select id="water" name="water" required>
-                    <option value="false">否</option>
-                    <option value="true" selected>是</option>
-                </select>
-                <div class="additional-fee">
-                    <label for="water_additional_fee">水費附加費用</label>
-                    <input type="number" id="water_additional_fee" name="water_additional_fee" value="0" required>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="management_fee">包含管理費</label>
-                <select id="management_fee" name="management_fee" required>
-                    <option value="false">否</option>
-                    <option value="true" selected>是</option>
-                </select>
-                <div class="additional-fee">
-                    <label for="management_fee_additional_fee">管理費附加費用</label>
-                    <input type="number" id="management_fee_additional_fee" name="management_fee_additional_fee" value="0" required>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="features">特色</label>
-                <select id="features" name="features" multiple required>
-                    <option value="allow_cooking">可開伙</option>
-                    <option value="allow_cats">可養貓</option>
-                    <option value="allow_dogs">可養狗</option>
-                    <option value="allow_other_pets">可養其他寵物</option>
-                    <option value="dry_wet_separation">乾濕分離</option>
-                    <option value="mother_son_parking">子母車</option>
-                    <option value="water_dispenser">飲水機</option>
-                    <option value="surveillance">監視器</option>
-                    <option value="elevator">電梯</option>
-                    <option value="access_control">門禁磁扣</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="decoration_style">裝修風格</label>
-                <input type="text" id="decoration_style" name="decoration_style" value="現代" required>
-            </div>
-            <div class="form-group">
-                <label for="tenant_preferences">租客偏好</label>
-                <select id="tenant_preferences" name="tenant_preferences" multiple required>
-                    <option value="male_only">僅限男性</option>
-                    <option value="female_only">僅限女性</option>
-                    <option value="no_night_life">不接受夜生活</option>
-                    <option value="students_only" selected>僅限學生</option>
-                    <option value="working_professionals_only">僅限職業人士</option>
-                    <option value="others">其他</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="community">社區</label>
-                <input type="text" id="community" name="community" value="範例社區" required>
-            </div>
-            <div class="form-group">
-                <label for="min_lease_months">最短租期(月)</label>
-                <input type="number" id="min_lease_months" name="min_lease_months" value="6" required>
-            </div>
-            <div class="form-group">
-                <label for="has_balcony">是否有陽台</label>
-                <select id="has_balcony" name="has_balcony" required>
-                    <option value="true" selected>有</option>
-                    <option value="false">無</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="images">圖片</label>
+                <label for="images">圖片 *</label>
                 <input type="file" id="images" name="images" multiple required>
             </div>
-            <div class="form-group">
-                <label for="bathroom_info">浴室資訊(可選)</label>
-                <input type="text" id="bathroom_info" name="bathroom_info" value="一個浴室">
-            </div>
-            <div class="form-group">
-                <label for="building_age">建築年齡(可選)</label>
-                <input type="number" id="building_age" name="building_age" value="5">
-            </div>
-            <div class="form-actions">
-                <button type="submit">
-                    <i class="fas fa-paper-plane animated-icon"></i> 提交
-                </button>
-            </div>
-        </form>
+        </div>
     </div>
     <script>
+        const collapsibleHeaders = document.querySelectorAll('.collapsible .collapsible-header');
+        collapsibleHeaders.forEach(header => {
+            header.addEventListener('click', () => {
+                const content = header.nextElementSibling;
+                const icon = header.querySelector('i');
+                if (content.style.display === 'block') {
+                    content.style.display = 'none';
+                    icon.classList.remove('fa-chevron-up');
+                    icon.classList.add('fa-chevron-down');
+                } else {
+                    content.style.display = 'block';
+                    icon.classList.remove('fa-chevron-down');
+                    icon.classList.add('fa-chevron-up');
+                }
+            });
+        });
+
+        let currentImageIndex = 0;
+        let imageFiles = [];
+
+        document.getElementById('images').addEventListener('change', function (event) {
+            imageFiles = Array.from(event.target.files);
+            if (imageFiles.length > 0) {
+                displayImage(0);
+            }
+        });
+
+        function displayImage(index) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                document.getElementById('current-image').src = e.target.result;
+            }
+            reader.readAsDataURL(imageFiles[index]);
+            currentImageIndex = index;
+        }
+
+        function prevImage() {
+            if (currentImageIndex > 0) {
+                displayImage(currentImageIndex - 1);
+            }
+        }
+
+        function nextImage() {
+            if (currentImageIndex < imageFiles.length - 1) {
+                displayImage(currentImageIndex + 1);
+            }
+        }
+
+        function removeImage() {
+            imageFiles.splice(currentImageIndex, 1);
+            if (imageFiles.length > 0) {
+                if (currentImageIndex === imageFiles.length) {
+                    currentImageIndex--;
+                }
+                displayImage(currentImageIndex);
+            } else {
+                document.getElementById('current-image').src = '';
+            }
+        }
+
         document.querySelectorAll('select').forEach(select => {
             select.addEventListener('change', function () {
                 const parent = this.closest('.form-group');
-                if (this.id === 'electric' || this.id === 'water' || this.id === 'management_fee') {
+                if (this.id === 'electric' || this.id === 'water' || this.id === 'management_fee' || this.id === 'internet') {
                     if (this.value === 'false') {
                         parent.querySelector('.additional-fee').style.display = 'block';
                         if (this.id === 'internet') {
@@ -471,13 +635,17 @@
             }
         });
 
-        // 初始化時檢查各選項狀態
         document.querySelectorAll('select').forEach(select => {
             const parent = select.closest('.form-group');
             if (select.value === 'false') {
                 parent.querySelector('.additional-fee').style.display = 'block';
                 if (select.id === 'internet') {
                     parent.querySelector('.internet-speed').style.display = 'block';
+                }
+            } else {
+                parent.querySelector('.additional-fee').style.display = 'none';
+                if (select.id === 'internet') {
+                    parent.querySelector('.internet-speed').style.display = 'none';
                 }
             }
             if (select.id === 'negotiation' && select.value === 'true') {

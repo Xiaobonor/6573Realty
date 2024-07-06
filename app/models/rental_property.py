@@ -129,6 +129,8 @@ class RentalProperty(Document):
                rent_price, negotiation, property_type, layout, features, building_type, area, rent_includes,
                decoration_style, tenant_preferences, community, min_lease_months, has_balcony, images, rooms,
                bathroom_info=None, building_age=None, display_tags=None, amenities=None):
+        if amenities is None or amenities == "":
+            amenities = []
         rental_property = cls(
             name=name,
             description=description,
