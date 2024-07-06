@@ -117,7 +117,6 @@ def create_property():
             has_balcony=data.get('has_balcony', [generated_fields.get('has_balcony', '')])[0] == 'true',
             images=base64s,
             rooms=rooms,
-            bathroom_info=data.get('bathroom_info', [None])[0],
             building_age=int(data.get('building_age', [0])[0])
         )
 

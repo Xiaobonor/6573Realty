@@ -108,11 +108,10 @@ class RentalProperty(Document):
     # Other
     tenant_preferences = ListField(StringField(
         choices=['male_only', 'female_only', 'no_night_life', 'students_only', 'working_professionals_only',
-                 'others']), required=True)
+                 'others']), required=False)
     community = StringField(required=True)
     min_lease_months = IntField(required=True)
     has_balcony = BooleanField(required=True)
-    bathroom_info = StringField()  # Optional
     building_age = IntField()  # Optional
     display_tags = ListField(StringField())
     view_count = IntField(default=0, required=True)
@@ -127,17 +126,32 @@ class RentalProperty(Document):
     @classmethod
     def create(cls, name, description, detailed_description, landlord, furniture, address, floor_info,
                rent_price, negotiation, property_type, layout, features, building_type, area, rent_includes,
-               decoration_style, tenant_preferences, community, min_lease_months, has_balcony, images, rooms,
-               bathroom_info=None, building_age=None, display_tags=None, amenities=None):
+               decoration_style, community, min_lease_months, has_balcony, images, rooms,
+               building_age=None, display_tags=None, amenities=None, tenant_preferences=None):
         if amenities is None or amenities == "":
             amenities = []
+        if tenant_preferences is None or tenant_preferences == "":
+            tenant_preferences = []
+
+        valid_amenities = [
+            'wifi', 'washing_machine', 'refrigerator', 'water_heater', 'microwave', 'air_conditioner',
+            'heater', 'tv', 'dishwasher', 'oven', 'fan', 'cooker_hood', 'water_purifier',
+            'air_purifier', 'fire_extinguisher', 'smoke_detector', 'electric_stove'
+        ]
+        filtered_amenities = [amenity for amenity in amenities if amenity in valid_amenities]
+        valid_furniture = [
+            'sofa', 'bed', 'desk_chair', 'dining_table', 'wardrobe', 'bookshelf',
+            'tv_stand', 'nightstand', 'dresser', 'shoe_rack'
+        ]
+        filtered_furniture = [furniture for furniture in furniture if furniture in valid_furniture]
+
         rental_property = cls(
             name=name,
             description=description,
             detailed_description=detailed_description,
             landlord=landlord,
-            furniture=furniture,
-            amenities=amenities,
+            furniture=filtered_furniture,
+            amenities=filtered_amenities,
             address=address,
             floor_info=floor_info,
             rent_price=rent_price,
@@ -153,7 +167,6 @@ class RentalProperty(Document):
             community=community,
             min_lease_months=min_lease_months,
             has_balcony=has_balcony,
-            bathroom_info=bathroom_info,
             building_age=building_age,
             display_tags=display_tags or [],
             images=images,

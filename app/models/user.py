@@ -1,6 +1,16 @@
 # app/models/user.py
 from datetime import datetime
-from mongoengine import Document, StringField, URLField, EmailField, DateTimeField
+from mongoengine import Document, StringField, URLField, EmailField, DateTimeField, BooleanField, EmbeddedDocument, \
+    IntField, EmbeddedDocumentField, ListField
+
+
+class FindRentProperty(EmbeddedDocument):
+    max_price = IntField(required=True)
+    location = ListField(required=True)  # City and District name
+    target_location = StringField(required=True)  # school or company location, why they want to rent the property
+    property_type = ListField(choices=['entire_home', 'studio', 'shared_room'], required=True)
+    layout = ListField(choices=['1_room', '2_rooms', '3_rooms', '4_rooms'], required=True)
+    building_type = ListField(choices=['apartment', 'elevator_building', 'townhouse', 'villa', 'N/A'], required=True)
 
 
 class User(Document):
@@ -8,6 +18,9 @@ class User(Document):
     email = EmailField(required=True, unique=True)
     name = StringField(required=True, max_length=50)
     avatar_url = URLField(required=True)
+
+    find_rent_property = BooleanField(required=True)
+    find_rent_property_detail = EmbeddedDocumentField(FindRentProperty)
 
     created_at = DateTimeField(default=datetime.utcnow)
 

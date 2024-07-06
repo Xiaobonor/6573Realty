@@ -71,6 +71,12 @@
             border-color: #007aff;
         }
 
+        .form-group input[required],
+        .form-group select[required],
+        .form-group textarea[required] {
+            border-color: #FFA07A;
+        }
+
         .form-group .info {
             font-size: 12px;
             color: #888;
@@ -183,6 +189,12 @@
 
         .remove-image-btn:hover {
             background: rgba(0, 0, 0, 0.7);
+        }
+
+        .negotiation-price,
+        .additional-fee,
+        .internet-speed {
+            display: none;
         }
     </style>
 </head>
@@ -305,12 +317,12 @@
                 <div class="form-group">
                     <label for="electric">包含電費 *</label>
                     <select id="electric" name="electric" required>
-                        <option value="false">否</option>
-                        <option value="true" selected>是</option>
+                        <option value="false" selected>否</option>
+                        <option value="true">是</option>
                     </select>
-                    <div class="additional-fee">
+                    <div class="additional-fee" style="display: block;">
                         <label for="electric_price_per_unit">電費單價 (每單位)</label>
-                        <input type="number" id="electric_price_per_unit" name="electric_price_per_unit" value="0" required>
+                        <input type="number" id="electric_price_per_unit" name="electric_price_per_unit" value="0">
                     </div>
                 </div>
                 <div class="form-group">
@@ -321,12 +333,12 @@
                     </select>
                     <div class="additional-fee">
                         <label for="internet_additional_fee">網路附加費用</label>
-                        <input type="number" id="internet_additional_fee" name="internet_additional_fee" value="0" required>
+                        <input type="number" id="internet_additional_fee" name="internet_additional_fee" value="0">
                     </div>
-                    <div class="internet-speed">
-                        <label for="internet_download_speed">下載速度 (Mbps)</label>
+                    <div class="internet-speed" style="display: block;">
+                        <label for="internet_download_speed">下載 (Mbps)</label>
                         <input type="number" id="internet_download_speed" name="internet_download_speed" value="0" required>
-                        <label for="internet_upload_speed">上傳速度 (Mbps)</label>
+                        <label for="internet_upload_speed">上傳 (Mbps)</label>
                         <input type="number" id="internet_upload_speed" name="internet_upload_speed" value="0" required>
                     </div>
                 </div>
@@ -338,7 +350,7 @@
                     </select>
                     <div class="additional-fee">
                         <label for="water_additional_fee">水費附加費用</label>
-                        <input type="number" id="water_additional_fee" name="water_additional_fee" value="0" required>
+                        <input type="number" id="water_additional_fee" name="water_additional_fee" value="0">
                     </div>
                 </div>
                 <div class="form-group">
@@ -349,7 +361,7 @@
                     </select>
                     <div class="additional-fee">
                         <label for="management_fee_additional_fee">管理費附加費用</label>
-                        <input type="number" id="management_fee_additional_fee" name="management_fee_additional_fee" value="0" required>
+                        <input type="number" id="management_fee_additional_fee" name="management_fee_additional_fee" value="0">
                     </div>
                 </div>
                 <div class="form-group">
@@ -406,23 +418,6 @@
                 <div class="form-group">
                     <label for="building_age">建築年齡(可選)</label>
                     <input type="number" id="building_age" name="building_age" value="5">
-                </div>
-                <div class="collapsible">
-                    <div class="collapsible-header">
-                        <span>展開以填寫更多資訊</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="collapsible-content">
-                        <div class="form-group">
-                            <label for="additional_info_1">附加資訊1</label>
-                            <input type="text" id="additional_info_1" name="additional_info_1">
-                        </div>
-                        <div class="form-group">
-                            <label for="additional_info_2">附加資訊2</label>
-                            <input type="text" id="additional_info_2" name="additional_info_2">
-                        </div>
-                        <!-- 在此處添加更多可選填寫的項目 -->
-                    </div>
                 </div>
                 <div class="form-actions">
                     <button type="submit">
@@ -515,14 +510,8 @@
                 if (this.id === 'electric' || this.id === 'water' || this.id === 'management_fee' || this.id === 'internet') {
                     if (this.value === 'false') {
                         parent.querySelector('.additional-fee').style.display = 'block';
-                        if (this.id === 'internet') {
-                            parent.querySelector('.internet-speed').style.display = 'block';
-                        }
                     } else {
                         parent.querySelector('.additional-fee').style.display = 'none';
-                        if (this.id === 'internet') {
-                            parent.querySelector('.internet-speed').style.display = 'none';
-                        }
                     }
                 } else if (this.id === 'negotiation') {
                     if (this.value === 'true') {
@@ -588,7 +577,7 @@
             const formData = new FormData(this);
             const alertSuccess = document.getElementById('alert-success');
             const alertError = document.getElementById('alert-error');
-            const files = formData.getAll('images');
+            const files = imageFiles;
 
             try {
                 const compressedFilesPromises = files.map(async file => {
@@ -637,15 +626,11 @@
 
         document.querySelectorAll('select').forEach(select => {
             const parent = select.closest('.form-group');
-            if (select.value === 'false') {
-                parent.querySelector('.additional-fee').style.display = 'block';
-                if (select.id === 'internet') {
-                    parent.querySelector('.internet-speed').style.display = 'block';
-                }
-            } else {
-                parent.querySelector('.additional-fee').style.display = 'none';
-                if (select.id === 'internet') {
-                    parent.querySelector('.internet-speed').style.display = 'none';
+            if (select.id === 'electric' || select.id === 'water' || select.id === 'management_fee' || select.id === 'internet') {
+                if (select.value === 'false') {
+                    parent.querySelector('.additional-fee').style.display = 'block';
+                } else {
+                    parent.querySelector('.additional-fee').style.display = 'none';
                 }
             }
             if (select.id === 'negotiation' && select.value === 'true') {
