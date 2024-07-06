@@ -79,6 +79,7 @@ def create_property():
 
         generated_fields = {}
         required_fields = {
+            'name': '標題',
             'description': '簡述',
             'detailed_description': '詳細描述',
             'furniture': '家具',
@@ -86,15 +87,20 @@ def create_property():
             'decoration_style': '裝修風格'
         }
 
+        data_tag_to_gen = {
+            'address': data.get('address', [''])[0]
+        }
+        data_tag_to_gen.update(image_tag_data)
+
         for field, description in required_fields.items():
             if not data.get(field) or data.get(field)[0] == '':
-                generated_text, usage = asyncio.run(tag_fields_generated(field, image_tag_data))
+                generated_text, usage = asyncio.run(tag_fields_generated(field, data_tag_to_gen))
                 print(f"Generated {field}: {generated_text['field_output']}")
                 generated_fields[field] = generated_text['field_output']
                 print(f"Generated Done: {generated_fields.get(field)}")
 
         rental_property = RentalProperty.create(
-            name=data['name'][0],
+            name=generated_fields.get('name') or data.get('name', [''])[0],
             description=generated_fields.get('description') or data.get('description', [''])[0],
             detailed_description=generated_fields.get('detailed_description') or data.get('detailed_description', [''])[0],
             landlord=landlord,
@@ -102,7 +108,8 @@ def create_property():
             amenities=data.get('amenities', generated_fields.get('amenities', '').split(',')),
             address=data['address'][0],
             floor_info=data['floor_info'][0],
-            rent_price=float(data['rent_price'][0]),
+            rent_price=int(data['rent_price'][0]),
+            deposit=int(data['deposit'][0]),
             negotiation=negotiation,
             property_type=data['property_type'][0],
             layout=data['layout'][0],

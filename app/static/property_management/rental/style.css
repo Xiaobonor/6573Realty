@@ -57,16 +57,16 @@ body {
     transition: border-color 0.3s;
 }
 
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-    border-color: #007aff;
-}
-
 .form-group input[required],
 .form-group select[required],
 .form-group textarea[required] {
     border-color: #FFA07A;
+}
+
+.form-group input[required]:focus,
+.form-group select[required]:focus,
+.form-group textarea[required]:focus {
+    border-color: #007aff;
 }
 
 .form-group .info {

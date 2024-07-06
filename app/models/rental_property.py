@@ -79,7 +79,8 @@ class RentalProperty(Document):
     floor_info = StringField(required=True)  # e.g., "3/5"
 
     # Price
-    rent_price = FloatField(required=True)
+    rent_price = IntField(required=True)
+    deposit = IntField(required=True)
     negotiation = EmbeddedDocumentField(Negotiation, required=True)
 
     # Property Type
@@ -109,7 +110,7 @@ class RentalProperty(Document):
     tenant_preferences = ListField(StringField(
         choices=['male_only', 'female_only', 'no_night_life', 'students_only', 'working_professionals_only',
                  'others']), required=False)
-    community = StringField(required=True)
+    community = StringField(required=False)
     min_lease_months = IntField(required=True)
     has_balcony = BooleanField(required=True)
     building_age = IntField()  # Optional
@@ -126,12 +127,14 @@ class RentalProperty(Document):
     @classmethod
     def create(cls, name, description, detailed_description, landlord, furniture, address, floor_info,
                rent_price, negotiation, property_type, layout, features, building_type, area, rent_includes,
-               decoration_style, community, min_lease_months, has_balcony, images, rooms,
-               building_age=None, display_tags=None, amenities=None, tenant_preferences=None):
+               decoration_style, min_lease_months, has_balcony, images, rooms, deposit,
+               building_age=None, display_tags=None, amenities=None, tenant_preferences=None, community=None):
         if amenities is None or amenities == "":
             amenities = []
         if tenant_preferences is None or tenant_preferences == "":
             tenant_preferences = []
+        if community is None or community == "":
+            community = ""
 
         valid_amenities = [
             'wifi', 'washing_machine', 'refrigerator', 'water_heater', 'microwave', 'air_conditioner',
@@ -155,6 +158,7 @@ class RentalProperty(Document):
             address=address,
             floor_info=floor_info,
             rent_price=rent_price,
+            deposit=deposit,
             negotiation=negotiation,
             property_type=property_type,
             layout=layout,

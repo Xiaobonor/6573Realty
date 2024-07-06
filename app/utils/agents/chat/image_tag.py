@@ -6,7 +6,7 @@ from app.utils.openai.openai_chat import generate_text_with_images
 prompt = """你現在是專業的房屋圖片分析師，你必須根據使用者上傳的圖片來分析應該給予什麼對應的#tag，例如一張圖片擁有木質地板，那你應該給予"#木地板"的tag；如果擁有高樓層的view，窗外看過去是一片公園綠地，你應該給予"#高樓層"、"#鄰近公園"、"#好view"的tag；如果房間牆壁是黃色油漆，你應該給予"#黃油漆牆壁"的tag。
 你必須盡可能的為圖片上更多詳細的tag越好，越多越詳細、越精確越好，這樣才能讓使用者真正有效率的找到他們想要的房屋。最好詳細還概到整個風格、有的傢俱、設計、請不要放過任何可以tag的東西。
 同時你也必須根據圖片可能的位置來給予對應標記，例如在廁所你應該給予的是廁所相關標記，例如在臥室則是給予臥室相關的標記。接著你必須為你所標記的內容分類，哪些是在哪個位置(房間)的。
-最後，你必須為所有標記進行分類及為這個房間打分。
+最後，你必須為所有標記進行分類及為這個房間打分。而你所給出的所有tag必須是繁體中文，因為這會給使用者看，而Key必須是英文，以便於後續處理。
 -------------------------------------
 You cannot output anything other than json, just a json object.
 Output structure must be a valid JSON object and without space or newline or codeblock.

@@ -226,3 +226,41 @@ function handleDrop(event) {
 document.getElementById('image-upload-preview').addEventListener('dragleave', function () {
     this.classList.remove('dragover');
 });
+
+document.querySelectorAll('input[required], select[required], textarea[required]').forEach(element => {
+    element.addEventListener('input', function() {
+        if (this.value !== '') {
+            this.style.borderColor = '#ccc';
+        } else {
+            this.style.borderColor = '#FFA07A';
+        }
+    });
+
+    if (element.tagName === 'SELECT') {
+        element.addEventListener('change', function() {
+            if (this.value !== '') {
+                this.style.borderColor = '#ccc';
+            } else {
+                this.style.borderColor = '#FFA07A';
+            }
+        });
+    }
+});
+
+document.querySelectorAll('.collapsible .collapsible-header').forEach(header => {
+    header.addEventListener('click', function() {
+        const content = header.nextElementSibling;
+        if (content.style.display === 'block') {
+            content.style.display = 'none';
+        } else {
+            content.style.display = 'block';
+            content.querySelectorAll('input[required], select[required], textarea[required]').forEach(element => {
+                if (element.value !== '') {
+                    element.style.borderColor = '#ccc';
+                } else {
+                    element.style.borderColor = '#FFA07A';
+                }
+            });
+        }
+    });
+});
