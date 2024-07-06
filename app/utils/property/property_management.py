@@ -1,6 +1,7 @@
 # app/utils/property/property_management.py
 from app.models.rental_property import (Negotiation, RentIncludes, Electric, Internet, Water,
                                         ManagementFee, Room, RoomTags, RentalProperty)
+from app.models.tags import Tag
 from app.utils.agents.chat.image_tag import image_tag
 from app.utils.agents.chat.tag_fields_generated import tag_fields_generated
 
@@ -40,6 +41,8 @@ async def generate_tags_and_fields(base64s, data):
     image_tag_data, usage = await image_tag(base64s)
     rooms = []
 
+    all_tags = set()
+
     if image_tag_data.get('success'):
         for room_data in image_tag_data.get('rooms', []):
             tags = RoomTags(
@@ -57,6 +60,21 @@ async def generate_tags_and_fields(base64s, data):
                 negative=room_data['tags'].get('negative', []),
                 other=room_data['tags'].get('other', [])
             )
+
+            all_tags.update(room_data['tags'].get('floor', []))
+            all_tags.update(room_data['tags'].get('walls', []))
+            all_tags.update(room_data['tags'].get('view', []))
+            all_tags.update(room_data['tags'].get('furniture', []))
+            all_tags.update(room_data['tags'].get('features', []))
+            all_tags.update(room_data['tags'].get('appliances', []))
+            all_tags.update(room_data['tags'].get('lighting', []))
+            all_tags.update(room_data['tags'].get('decor', []))
+            all_tags.update(room_data['tags'].get('color_scheme', []))
+            all_tags.update(room_data['tags'].get('size', []))
+            all_tags.update(room_data['tags'].get('positive', []))
+            all_tags.update(room_data['tags'].get('negative', []))
+            all_tags.update(room_data['tags'].get('other', []))
+
             room = Room(
                 room_category=room_data['room_category'],
                 room_score=int(room_data['room_score']),
@@ -83,6 +101,8 @@ async def generate_tags_and_fields(base64s, data):
         if not data.get(field) or data.get(field)[0] == '':
             generated_text, usage = await tag_fields_generated(field, data_tag_to_gen)
             generated_fields[field] = generated_text['field_output']
+
+    Tag.in_related_tags("allTags", list(all_tags))
 
     return generated_fields, rooms
 

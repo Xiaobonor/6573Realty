@@ -160,7 +160,7 @@ document.getElementById('property-form').addEventListener('submit', async functi
             formData.append('images', base64);
         });
 
-        const response = await fetch('/api/v1/rent/management/new', {
+        const response = await fetch('/api/v1/rental/management/new', {
             method: 'POST',
             body: formData
         });

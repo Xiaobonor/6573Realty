@@ -1,3 +1,4 @@
+# app/models/rental_property.py
 from datetime import datetime
 from mongoengine import Document, StringField, UUIDField, ReferenceField, ListField, EmbeddedDocument, EmbeddedDocumentField, EmbeddedDocumentListField, IntField, FloatField, BooleanField, URLField, DateTimeField
 import uuid
@@ -123,6 +124,10 @@ class RentalProperty(Document):
     last_pushed_at = DateTimeField()
 
     meta = {'collection': 'rental_properties'}
+
+    @classmethod
+    def get_property_by_uuid(cls, uuid):
+        return cls.objects(uuid=uuid).first()
 
     @classmethod
     def create(cls, name, description, detailed_description, landlord, furniture, address, floor_info,
