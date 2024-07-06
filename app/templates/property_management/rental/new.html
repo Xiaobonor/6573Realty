@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>租賃房產資訊填寫</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .container {
+            background: #ffffff;
+            padding: 20px 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            transition: border-color 0.3s;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: #007aff;
+        }
+        .form-group .info {
+            font-size: 12px;
+            color: #888;
+        }
+        .form-actions {
+            text-align: center;
+        }
+        .form-actions button {
+            background-color: #007aff;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .form-actions button:hover {
+            background-color: #005bb5;
+        }
+        .animated-icon {
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>租賃房產資訊填寫</h2>
+        <form action="/submit_property" method="POST">
+            <div class="form-group">
+                <label for="name">名稱</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="description">簡述</label>
+                <input type="text" id="description" name="description" required>
+            </div>
+            <div class="form-group">
+                <label for="detailed_description">詳細描述</label>
+                <textarea id="detailed_description" name="detailed_description" rows="4" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="landlord">房東</label>
+                <input type="text" id="landlord" name="landlord" required>
+            </div>
+            <div class="form-group">
+                <label for="address">地址</label>
+                <input type="text" id="address" name="address" required>
+            </div>
+            <div class="form-group">
+                <label for="floor_info">樓層資訊</label>
+                <input type="text" id="floor_info" name="floor_info" required>
+                <div class="info">例如: "3/5" 表示五層樓中的第三層</div>
+            </div>
+            <div class="form-group">
+                <label for="rent_price">租金價格</label>
+                <input type="number" id="rent_price" name="rent_price" required>
+            </div>
+            <div class="form-group">
+                <label for="negotiation">議價</label>
+                <select id="negotiation" name="negotiation" required>
+                    <option value="true">可議價</option>
+                    <option value="false">不可議價</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="property_type">房產類型</label>
+                <select id="property_type" name="property_type" required>
+                    <option value="entire_home">整租</option>
+                    <option value="studio">單間</option>
+                    <option value="shared_room">合租</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="layout">房型</label>
+                <select id="layout" name="layout" required>
+                    <option value="1_room">一室</option>
+                    <option value="2_rooms">兩室</option>
+                    <option value="3_rooms">三室</option>
+                    <option value="4_rooms">四室</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="building_type">建築類型</label>
+                <select id="building_type" name="building_type" required>
+                    <option value="apartment">公寓</option>
+                    <option value="elevator_building">電梯大樓</option>
+                    <option value="townhouse">聯排別墅</option>
+                    <option value="villa">獨棟別墅</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="furniture">家具</label>
+                <input type="text" id="furniture" name="furniture" required>
+            </div>
+            <div class="form-group">
+                <label for="amenities">便利設施</label>
+                <input type="text" id="amenities" name="amenities" required>
+            </div>
+            <div class="form-group">
+                <label for="rent_includes">租金包含</label>
+                <input type="text" id="rent_includes" name="rent_includes" required>
+            </div>
+            <div class="form-group">
+                <label for="allowances">額外費用</label>
+                <input type="text" id="allowances" name="allowances" required>
+            </div>
+            <div class="form-group">
+                <label for="features">特色</label>
+                <input type="text" id="features" name="features" required>
+            </div>
+            <div class="form-group">
+                <label for="decoration_style">裝修風格</label>
+                <input type="text" id="decoration_style" name="decoration_style" required>
+            </div>
+            <div class="form-group">
+                <label for="tenant_preferences">租客偏好</label>
+                <select id="tenant_preferences" name="tenant_preferences" multiple required>
+                    <option value="male_only">僅限男性</option>
+                    <option value="female_only">僅限女性</option>
+                    <option value="no_night_life">不接受夜生活</option>
+                    <option value="students_only">僅限學生</option>
+                    <option value="working_professionals_only">僅限職業人士</option>
+                    <option value="others">其他</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="community">社區</label>
+                <input type="text" id="community" name="community" required>
+            </div>
+            <div class="form-group">
+                <label for="min_lease_months">最短租期(月)</label>
+                <input type="number" id="min_lease_months" name="min_lease_months" required>
+            </div>
+            <div class="form-group">
+                <label for="has_balcony">是否有陽台</label>
+                <select id="has_balcony" name="has_balcony" required>
+                    <option value="true">有</option>
+                    <option value="false">無</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="images">圖片</label>
+                <input type="file" id="images" name="images" multiple required>
+            </div>
+            <div class="form-group">
+                <label for="bathroom_info">浴室資訊(可選)</label>
+                <input type="text" id="bathroom_info" name="bathroom_info">
+            </div>
+            <div class="form-group">
+                <label for="building_age">建築年齡(可選)</label>
+                <input type="number" id="building_age" name="building_age">
+            </div>
+            <div class="form-group">
+                <label for="display_tags">顯示標籤</label>
+                <input type="text" id="display_tags" name="display_tags" required>
+            </div>
+            <div class="form-actions">
+                <button type="submit">
+                    <i class="fas fa-paper-plane animated-icon"></i> 提交
+                </button>
+            </div>
+        </form>
+    </div>
+    <script>
+        // 添加簡單的動畫效果
+        document.querySelector('button').addEventListener('mouseover', function() {
+            this.querySelector('.animated-icon').classList.add('fa-bounce');
+        });
+        document.querySelector('button').addEventListener('mouseout', function() {
+            this.querySelector('.animated-icon').classList.remove('fa-bounce');
+        });
+    </script>
+</body>
+</html>
