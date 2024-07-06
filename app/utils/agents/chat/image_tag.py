@@ -15,7 +15,7 @@ The output structure must be a valid JSON object with a structure like:
   "success": true, // 表示請求是否成功，布爾值（true 或 false）
   "rooms": [ 
     {
-      "room_category": "bedroom", // 房間類型，可能有多個相同房間，請分開填寫 [bedroom, bathroom, living_room, kitchen, dining_room, study, guest_room, laundry_room, garage, balcony, garden, hallway, exterior]
+      "room_category": "bedroom", // 房間類型，相同類型請都填寫在一個rooms內。[bedroom, bathroom, living_room, kitchen, dining_room, study, guest_room, laundry_room, garage, balcony, garden, hallway, exterior]
       "room_score": "", // 該房間的評分，範圍為 0 到 100，請填入評分
       "tags": {
         "floor": [], // 地板相關標籤
@@ -28,22 +28,9 @@ The output structure must be a valid JSON object with a structure like:
         "decor": [], // 裝飾風格標籤
         "color_scheme": [], // 配色相關標籤
         "size": [], // 房間大小相關標籤
+        "positive": [], // 正面標籤
+        "negative": [], // 負面標籤
         "other": [] // 其他標籤
-      }
-    },
-    {
-      "room_category": "bedroom", 
-      "room_score": "", 
-      "tags": {
-        "floor": [],
-        "walls": [],
-        "features": [],
-        "appliances": [],
-        "lighting": [],
-        "decor": [],
-        "color_scheme": [],
-        "size": [],
-        "other": []
       }
     },
     {
@@ -84,4 +71,5 @@ The output structure must be a valid JSON object with a structure like:
 
 
 async def image_tag(base64s):
-    return await generate_text_with_images(prompt, base64s)
+    response, usage = await generate_text_with_images(prompt, base64s)
+    return json_repair.loads(response), usage

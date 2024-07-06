@@ -43,23 +43,20 @@ class RentIncludes(EmbeddedDocument):
     management_fee = EmbeddedDocumentField(ManagementFee, required=True)
 
 
-class Image(EmbeddedDocument):
-    url = URLField(required=True)
-    title = StringField(required=True)
-
-
 class RoomTags(EmbeddedDocument):
-    floor = ListField(StringField(), required=True)
-    walls = ListField(StringField(), required=True)
-    view = ListField(StringField(), required=True)
-    furniture = ListField(StringField(), required=True)
-    features = ListField(StringField(), required=True)
-    appliances = ListField(StringField(), required=True)
-    lighting = ListField(StringField(), required=True)
-    decor = ListField(StringField(), required=True)
-    color_scheme = ListField(StringField(), required=True)
-    size = ListField(StringField(), required=True)
-    other = ListField(StringField(), required=True)
+    floor = ListField(StringField())
+    walls = ListField(StringField())
+    view = ListField(StringField())
+    furniture = ListField(StringField())
+    features = ListField(StringField())
+    appliances = ListField(StringField())
+    lighting = ListField(StringField())
+    decor = ListField(StringField())
+    color_scheme = ListField(StringField())
+    size = ListField(StringField())
+    positive = ListField(StringField())
+    negative = ListField(StringField())
+    other = ListField(StringField())
 
 
 class Room(EmbeddedDocument):
@@ -100,10 +97,12 @@ class RentalProperty(Document):
     amenities = ListField(StringField(), required=True)
     rent_includes = EmbeddedDocumentField(RentIncludes, required=True)
     allowances = EmbeddedDocumentListField(Allowance, required=True)
-    features = ListField(StringField(choices=['allow_cooking', 'allow_pets', 'balcony']), required=True)
+    features = ListField(StringField(required=True))
+    # features = ListField(StringField(choices=['allow_cooking', 'allow_pets', 'balcony']), required=True)
     decoration_style = StringField(required=True)
-    images = EmbeddedDocumentListField(Image, required=True)
+    images = ListField(StringField(), required=True)
     rooms = EmbeddedDocumentListField(Room, required=True)
+    area = FloatField(required=True)
 
     # Other
     tenant_preferences = ListField(StringField(

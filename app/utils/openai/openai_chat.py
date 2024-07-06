@@ -42,7 +42,7 @@ async def generate_text(system_prompt: str, user_prompt: str, model=default_mode
     return message.content, usage
 
 
-async def generate_text_with_images(system_prompt: str, base64s: list, model="gpt-4o"):
+async def generate_text_with_images(system_prompt: str, base64s: list, model=default_model):
     """
     Generate text using images
     :param system_prompt: system prompt for message
@@ -63,12 +63,12 @@ async def generate_text_with_images(system_prompt: str, base64s: list, model="gp
             {
                 "type": "image_url",
                 "image_url": {
-                    "url": f"data:image/jpeg;base64,{base64}"
+                    "url": f"{base64}"
                 }
             }
         )
 
-    completion = await openai.ChatCompletion.create(
+    completion = await openai.chat.completions.create(
         model=model,
         messages=messages
     )

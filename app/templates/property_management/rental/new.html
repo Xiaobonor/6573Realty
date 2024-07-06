@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,6 +18,7 @@
             height: 100vh;
             overflow: hidden;
         }
+
         .container {
             background: #ffffff;
             padding: 20px 40px;
@@ -27,36 +29,48 @@
             max-height: 90vh;
             overflow-y: auto;
         }
+
         .container h2 {
             text-align: center;
             margin-bottom: 20px;
             color: #333;
         }
+
         .form-group {
             margin-bottom: 15px;
         }
+
         .form-group label {
             display: block;
             margin-bottom: 5px;
             color: #555;
         }
-        .form-group input, .form-group select, .form-group textarea {
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
             width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
             transition: border-color 0.3s;
         }
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
             border-color: #007aff;
         }
+
         .form-group .info {
             font-size: 12px;
             color: #888;
         }
+
         .form-actions {
             text-align: center;
         }
+
         .form-actions button {
             background-color: #007aff;
             color: #fff;
@@ -66,58 +80,87 @@
             cursor: pointer;
             transition: background-color 0.3s;
         }
+
         .form-actions button:hover {
             background-color: #005bb5;
         }
+
         .animated-icon {
             margin-right: 8px;
         }
+
+        .alert {
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid transparent;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .alert-success {
+            color: #155724;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+
+        .alert-error {
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h2>租賃房產資訊填寫</h2>
-        <form action="/submit_property" method="POST">
+        <div id="alert-success" class="alert alert-success">提交成功！</div>
+        <div id="alert-error" class="alert alert-error">提交失敗，請重試。</div>
+        <form id="property-form">
             <div class="form-group">
                 <label for="name">名稱</label>
-                <input type="text" id="name" name="name" required>
+                <input type="text" id="name" name="name" value="範例房產名稱" required>
             </div>
             <div class="form-group">
                 <label for="description">簡述</label>
-                <input type="text" id="description" name="description" required>
+                <input type="text" id="description" name="description" value="這是一個範例描述" required>
             </div>
             <div class="form-group">
                 <label for="detailed_description">詳細描述</label>
-                <textarea id="detailed_description" name="detailed_description" rows="4" required></textarea>
+                <textarea id="detailed_description" name="detailed_description" rows="4" required>這是一個範例的詳細描述</textarea>
             </div>
             <div class="form-group">
                 <label for="landlord">房東</label>
-                <input type="text" id="landlord" name="landlord" required>
+                <input type="text" id="landlord" name="landlord" value="John Doe" required>
+            </div>
+            <div class="form-group">
+                <label for="area">坪數</label>
+                <input type="number" id="area" name="area" value="10" required>
             </div>
             <div class="form-group">
                 <label for="address">地址</label>
-                <input type="text" id="address" name="address" required>
+                <input type="text" id="address" name="address" value="範例地址 123號" required>
             </div>
             <div class="form-group">
                 <label for="floor_info">樓層資訊</label>
-                <input type="text" id="floor_info" name="floor_info" required>
+                <input type="text" id="floor_info" name="floor_info" value="3/5" required>
                 <div class="info">例如: "3/5" 表示五層樓中的第三層</div>
             </div>
             <div class="form-group">
                 <label for="rent_price">租金價格</label>
-                <input type="number" id="rent_price" name="rent_price" required>
+                <input type="number" id="rent_price" name="rent_price" value="1000" required>
             </div>
             <div class="form-group">
                 <label for="negotiation">議價</label>
                 <select id="negotiation" name="negotiation" required>
-                    <option value="true">可議價</option>
+                    <option value="true" selected>可議價</option>
                     <option value="false">不可議價</option>
                 </select>
             </div>
             <div class="form-group">
                 <label for="property_type">房產類型</label>
                 <select id="property_type" name="property_type" required>
-                    <option value="entire_home">整租</option>
+                    <option value="entire_home" selected>整租</option>
                     <option value="studio">單間</option>
                     <option value="shared_room">合租</option>
                 </select>
@@ -126,7 +169,7 @@
                 <label for="layout">房型</label>
                 <select id="layout" name="layout" required>
                     <option value="1_room">一室</option>
-                    <option value="2_rooms">兩室</option>
+                    <option value="2_rooms" selected>兩室</option>
                     <option value="3_rooms">三室</option>
                     <option value="4_rooms">四室</option>
                 </select>
@@ -134,7 +177,7 @@
             <div class="form-group">
                 <label for="building_type">建築類型</label>
                 <select id="building_type" name="building_type" required>
-                    <option value="apartment">公寓</option>
+                    <option value="apartment" selected>公寓</option>
                     <option value="elevator_building">電梯大樓</option>
                     <option value="townhouse">聯排別墅</option>
                     <option value="villa">獨棟別墅</option>
@@ -142,27 +185,27 @@
             </div>
             <div class="form-group">
                 <label for="furniture">家具</label>
-                <input type="text" id="furniture" name="furniture" required>
+                <input type="text" id="furniture" name="furniture" value="沙發, 床, 書桌" required>
             </div>
             <div class="form-group">
                 <label for="amenities">便利設施</label>
-                <input type="text" id="amenities" name="amenities" required>
+                <input type="text" id="amenities" name="amenities" value="Wi-Fi, 洗衣機, 冰箱" required>
             </div>
             <div class="form-group">
                 <label for="rent_includes">租金包含</label>
-                <input type="text" id="rent_includes" name="rent_includes" required>
+                <input type="text" id="rent_includes" name="rent_includes" value="水電, 網路, 管理費" required>
             </div>
             <div class="form-group">
                 <label for="allowances">額外費用</label>
-                <input type="text" id="allowances" name="allowances" required>
+                <input type="text" id="allowances" name="allowances" value="1000" required>
             </div>
             <div class="form-group">
                 <label for="features">特色</label>
-                <input type="text" id="features" name="features" required>
+                <input type="text" id="features" name="features" value="允許烹飪, 允許寵物, 陽台" required>
             </div>
             <div class="form-group">
                 <label for="decoration_style">裝修風格</label>
-                <input type="text" id="decoration_style" name="decoration_style" required>
+                <input type="text" id="decoration_style" name="decoration_style" value="現代" required>
             </div>
             <div class="form-group">
                 <label for="tenant_preferences">租客偏好</label>
@@ -170,23 +213,23 @@
                     <option value="male_only">僅限男性</option>
                     <option value="female_only">僅限女性</option>
                     <option value="no_night_life">不接受夜生活</option>
-                    <option value="students_only">僅限學生</option>
+                    <option value="students_only" selected>僅限學生</option>
                     <option value="working_professionals_only">僅限職業人士</option>
                     <option value="others">其他</option>
                 </select>
             </div>
             <div class="form-group">
                 <label for="community">社區</label>
-                <input type="text" id="community" name="community" required>
+                <input type="text" id="community" name="community" value="範例社區" required>
             </div>
             <div class="form-group">
                 <label for="min_lease_months">最短租期(月)</label>
-                <input type="number" id="min_lease_months" name="min_lease_months" required>
+                <input type="number" id="min_lease_months" name="min_lease_months" value="6" required>
             </div>
             <div class="form-group">
                 <label for="has_balcony">是否有陽台</label>
                 <select id="has_balcony" name="has_balcony" required>
-                    <option value="true">有</option>
+                    <option value="true" selected>有</option>
                     <option value="false">無</option>
                 </select>
             </div>
@@ -196,15 +239,15 @@
             </div>
             <div class="form-group">
                 <label for="bathroom_info">浴室資訊(可選)</label>
-                <input type="text" id="bathroom_info" name="bathroom_info">
+                <input type="text" id="bathroom_info" name="bathroom_info" value="一個浴室">
             </div>
             <div class="form-group">
                 <label for="building_age">建築年齡(可選)</label>
-                <input type="number" id="building_age" name="building_age">
+                <input type="number" id="building_age" name="building_age" value="5">
             </div>
             <div class="form-group">
                 <label for="display_tags">顯示標籤</label>
-                <input type="text" id="display_tags" name="display_tags" required>
+                <input type="text" id="display_tags" name="display_tags" value="標籤1, 標籤2" required>
             </div>
             <div class="form-actions">
                 <button type="submit">
@@ -214,13 +257,115 @@
         </form>
     </div>
     <script>
-        // 添加簡單的動畫效果
-        document.querySelector('button').addEventListener('mouseover', function() {
+        document.querySelector('button').addEventListener('mouseover', function () {
             this.querySelector('.animated-icon').classList.add('fa-bounce');
         });
-        document.querySelector('button').addEventListener('mouseout', function() {
+        document.querySelector('button').addEventListener('mouseout', function () {
             this.querySelector('.animated-icon').classList.remove('fa-bounce');
         });
+
+        async function compressImage(file) {
+            const img = document.createElement("img");
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+
+            return new Promise((resolve, reject) => {
+                img.onload = () => {
+                    const width = img.width;
+                    const height = img.height;
+
+                    const max_size = 1024;
+                    if (width > height) {
+                        if (width > max_size) {
+                            height *= max_size / width;
+                            width = max_size;
+                        }
+                    } else {
+                        if (height > max_size) {
+                            width *= max_size / height;
+                            height = max_size;
+                        }
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    ctx.drawImage(img, 0, 0, width, height);
+                    canvas.toBlob((blob) => {
+                        resolve(blob);
+                    }, 'image/jpeg', 0.7);
+                };
+
+                img.onerror = (error) => {
+                    reject(error);
+                };
+
+                img.src = URL.createObjectURL(file);
+            });
+        }
+
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+
+document.getElementById('property-form').addEventListener('submit', async function (event) {
+    event.preventDefault();
+
+    const formData = new FormData(this);
+    const alertSuccess = document.getElementById('alert-success');
+    const alertError = document.getElementById('alert-error');
+    const files = formData.getAll('images');
+
+    try {
+        const compressedFilesPromises = files.map(async file => {
+            if (file.size > 5 * 1024 * 1024) {
+                const compressedBlob = await compressImage(file);
+                return new File([compressedBlob], file.name, { type: 'image/jpeg' });
+            }
+            return file;
+        });
+
+        const compressedFiles = await Promise.all(compressedFilesPromises);
+
+        const base64FilesPromises = compressedFiles.map(file => fileToBase64(file));
+        const base64Files = await Promise.all(base64FilesPromises);
+
+        formData.delete('images');
+        base64Files.forEach((base64, index) => {
+            formData.append('images', base64);  // 修改這一行，使所有圖片都附加到 'images' 字段中
+        });
+
+        const response = await fetch('/api/v1/rent/management/new', {
+            method: 'POST',
+            body: formData
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            alertSuccess.textContent = '租屋物件建立成功!';
+            alertSuccess.style.display = 'block';
+            alertError.style.display = 'none';
+            setTimeout(() => {
+                window.location.href = result.redirect_url;
+            }, 2000);
+        } else {
+            alertError.textContent = `建立租屋物件時發生錯誤: ${result.error}`;
+            alertError.style.display = 'block';
+            alertSuccess.style.display = 'none';
+        }
+    } catch (error) {
+        alertError.textContent = `建立租屋物件時發生錯誤: ${error.message}`;
+        alertError.style.display = 'block';
+        alertSuccess.style.display = 'none';
+    }
+});
+
     </script>
 </body>
+
 </html>
