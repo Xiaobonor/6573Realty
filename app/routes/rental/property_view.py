@@ -10,6 +10,9 @@ property_view_bp = Blueprint('property_view', __name__)
 def view_property(uuid):
     print(f"Viewing property: {uuid}")
     property = RentalProperty.get_property_by_uuid(uuid)
+    print_property = property
+    # remove
+    print(print_property)
     if property:
         landlord = User.objects(google_id=property.landlord.google_id).first()
         landlord_name = landlord.name if landlord else '未知'

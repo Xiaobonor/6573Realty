@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>偏好詢問網站</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='tag_user/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+
+    <div class="container" id="container">
+        <h1>偏好詢問網站</h1>
+        <div id="chatContainer">
+            <div id="chatBox" class="loading"></div>
+            <div id="inputContainer">
+                <input type="text" id="userInput" placeholder="請輸入您的偏好...">
+                <button id="sendButton">送出</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="propertyPopup" class="popup">
+        <div class="popup-content">
+            <span class="close-btn" id="closePopup">&times;</span>
+            <div id="propertyContainer"></div>
+            <div class="popup-buttons">
+                <button id="refreshButton">重新獲取</button>
+                <button id="submitSelectionButton">送出選擇</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ url_for('static', filename='tag_user/script.js') }}"></script>
+</body>
+</html>

@@ -7,10 +7,11 @@ from mongoengine import Document, StringField, URLField, EmailField, DateTimeFie
 class FindRentProperty(EmbeddedDocument):
     max_price = IntField(required=True)
     location = ListField(required=True)  # City and District name
-    target_location = StringField(required=True)  # school or company location, why they want to rent the property
+    target_location = StringField(required=False)  # school or company location, why they want to rent the property
     property_type = ListField(choices=['entire_home', 'studio', 'shared_room'], required=True)
     layout = ListField(choices=['1_room', '2_rooms', '3_rooms', '4_rooms'], required=True)
     building_type = ListField(choices=['apartment', 'elevator_building', 'townhouse', 'villa', 'N/A'], required=True)
+    tags = ListField(required=True)
 
 
 class Sellers(EmbeddedDocument):

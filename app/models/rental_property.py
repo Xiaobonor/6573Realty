@@ -191,3 +191,81 @@ class RentalProperty(Document):
         )
         rental_property.save()
         return rental_property
+
+    def to_dict(self):
+        return {
+            'uuid': str(self.uuid),
+            'name': self.name,
+            'description': self.description,
+            'detailed_description': self.detailed_description,
+            'landlord': str(self.landlord.id),
+            'address': self.address,
+            'floor_info': self.floor_info,
+            'rent_price': self.rent_price,
+            'deposit': self.deposit,
+            'negotiation': {
+                'allow': self.negotiation.allow,
+                'min_price': self.negotiation.min_price,
+                'max_price': self.negotiation.max_price,
+            },
+            'property_type': self.property_type,
+            'layout': self.layout,
+            'building_type': self.building_type,
+            'furniture': self.furniture,
+            'amenities': self.amenities,
+            'rent_includes': {
+                'electric': {
+                    'tai_power': self.rent_includes.electric.tai_power,
+                    'price_per_unit': self.rent_includes.electric.price_per_unit,
+                },
+                'internet': {
+                    'included': self.rent_includes.internet.included,
+                    'upload_speed': self.rent_includes.internet.upload_speed,
+                    'download_speed': self.rent_includes.internet.download_speed,
+                    'additional_fee': self.rent_includes.internet.additional_fee,
+                },
+                'water': {
+                    'included': self.rent_includes.water.included,
+                    'additional_fee': self.rent_includes.water.additional_fee,
+                },
+                'management_fee': {
+                    'included': self.rent_includes.management_fee.included,
+                    'additional_fee': self.rent_includes.management_fee.additional_fee,
+                },
+            },
+            'features': self.features,
+            'decoration_style': self.decoration_style,
+            'images': self.images,
+            'rooms': [
+                {
+                    'room_category': room.room_category,
+                    'room_score': room.room_score,
+                    'tags': {
+                        'floor': room.tags.floor,
+                        'walls': room.tags.walls,
+                        'view': room.tags.view,
+                        'furniture': room.tags.furniture,
+                        'features': room.tags.features,
+                        'appliances': room.tags.appliances,
+                        'lighting': room.tags.lighting,
+                        'decor': room.tags.decor,
+                        'color_scheme': room.tags.color_scheme,
+                        'size': room.tags.size,
+                        'positive': room.tags.positive,
+                        'negative': room.tags.negative,
+                        'other': room.tags.other,
+                    }
+                }
+            for room in self.rooms],
+            'area': self.area,
+            'tenant_preferences': self.tenant_preferences,
+            'community': self.community,
+            'min_lease_months': self.min_lease_months,
+            'has_balcony': self.has_balcony,
+            'building_age': self.building_age,
+            'display_tags': self.display_tags,
+            'view_count': self.view_count,
+            'created_at': self.created_at.isoformat(),
+            'last_updated_at': self.last_updated_at.isoformat(),
+            'last_pushed_at': self.last_pushed_at.isoformat() if self.last_pushed_at else None,
+        }
