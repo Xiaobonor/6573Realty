@@ -40,7 +40,8 @@ class User(Document):
                 google_id=google_id,
                 email=email,
                 name=name,
-                avatar_url=avatar_url
+                avatar_url=avatar_url,
+                find_rent_property=False
             )
             user.save()
             return user
