@@ -13,6 +13,14 @@ class FindRentProperty(EmbeddedDocument):
     building_type = ListField(choices=['apartment', 'elevator_building', 'townhouse', 'villa', 'N/A'], required=True)
 
 
+class Sellers(EmbeddedDocument):
+    name = StringField(required=True)
+    phone = StringField(required=True)
+    line = StringField(required=True)
+    company = StringField(required=True)
+    email = EmailField(required=True)
+
+
 class User(Document):
     google_id = StringField(required=True, primary_key=True)
     email = EmailField(required=True, unique=True)
@@ -21,6 +29,9 @@ class User(Document):
 
     find_rent_property = BooleanField(required=True)
     find_rent_property_detail = EmbeddedDocumentField(FindRentProperty)
+
+    sell_rent_property = BooleanField(required=True)
+    sell_rent_property_detail = EmbeddedDocumentField(Sellers)
 
     created_at = DateTimeField(default=datetime.utcnow)
 
@@ -41,7 +52,8 @@ class User(Document):
                 email=email,
                 name=name,
                 avatar_url=avatar_url,
-                find_rent_property=False
+                find_rent_property=False,
+                sell_rent_property=False
             )
             user.save()
             return user

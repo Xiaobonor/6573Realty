@@ -93,10 +93,10 @@ class RentalProperty(Document):
     furniture = ListField(StringField(choices=[
         'sofa', 'bed', 'desk_chair', 'dining_table', 'wardrobe', 'bookshelf',
         'tv_stand', 'nightstand', 'dresser', 'shoe_rack'
-    ]), required=True)
+    ]), required=False)
     amenities = ListField(StringField(choices=[
         'wifi', 'washing_machine', 'refrigerator', 'water_heater', 'microwave', 'air_conditioner',
-        'heater', 'tv', 'dishwasher', 'oven', 'fan', 'cooker_hood', 'water_purifier',
+        'heater', 'tv', 'dishwasher', 'oven', 'fan',
         'air_purifier', 'fire_extinguisher', 'smoke_detector', 'electric_stove'
     ]), required=False)
     rent_includes = EmbeddedDocumentField(RentIncludes, required=True)
@@ -118,6 +118,10 @@ class RentalProperty(Document):
     display_tags = ListField(StringField())
     view_count = IntField(default=0, required=True)
 
+    # Tags BERT and TF-IDF vectors
+    bert_vectors = ListField(ListField(FloatField()), required=True)
+    tfidf_vectors = ListField(ListField(FloatField()), required=True)
+
     # Timestamps
     created_at = DateTimeField(default=datetime.utcnow, required=True)
     last_updated_at = DateTimeField(default=datetime.utcnow, required=True)
@@ -130,20 +134,22 @@ class RentalProperty(Document):
         return cls.objects(uuid=uuid).first()
 
     @classmethod
-    def create(cls, name, description, detailed_description, landlord, furniture, address, floor_info,
+    def create(cls, name, description, detailed_description, landlord, address, floor_info,
                rent_price, negotiation, property_type, layout, features, building_type, area, rent_includes,
-               decoration_style, min_lease_months, has_balcony, images, rooms, deposit,
-               building_age=None, display_tags=None, amenities=None, tenant_preferences=None, community=None):
+               decoration_style, min_lease_months, has_balcony, images, rooms, deposit, bert_vectors, tfidf_vectors,
+               building_age=None, display_tags=None, amenities=None, tenant_preferences=None, community=None, furniture=None):
         if amenities is None or amenities == "":
             amenities = []
         if tenant_preferences is None or tenant_preferences == "":
             tenant_preferences = []
         if community is None or community == "":
             community = ""
+        if furniture is None or furniture == "":
+            furniture = []
 
         valid_amenities = [
             'wifi', 'washing_machine', 'refrigerator', 'water_heater', 'microwave', 'air_conditioner',
-            'heater', 'tv', 'dishwasher', 'oven', 'fan', 'cooker_hood', 'water_purifier',
+            'heater', 'tv', 'dishwasher', 'oven', 'fan',
             'air_purifier', 'fire_extinguisher', 'smoke_detector', 'electric_stove'
         ]
         filtered_amenities = [amenity for amenity in amenities if amenity in valid_amenities]
@@ -179,7 +185,9 @@ class RentalProperty(Document):
             building_age=building_age,
             display_tags=display_tags or [],
             images=images,
-            rooms=rooms
+            rooms=rooms,
+            bert_vectors=bert_vectors,
+            tfidf_vectors=tfidf_vectors
         )
         rental_property.save()
         return rental_property

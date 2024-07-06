@@ -63,7 +63,9 @@ def authorize():
             'google_id': user.google_id,
             'name': user.name,
             'email': user.email,
-            'avatar_url': user.avatar_url
+            'avatar_url': user.avatar_url,
+            'sell_rent_property': user.sell_rent_property,
+            'find_rent_property': user.find_rent_property
         }
 
         session.permanent = True

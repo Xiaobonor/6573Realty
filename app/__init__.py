@@ -55,6 +55,7 @@ def create_app():
     from app.routes.auth import auth_bp
     from app.routes.flash_messages import flash_message_bp
     from app.routes.index import index_bp
+    from app.routes.seller.register import seller_register_bp
     from app.routes.rental.property_management import rent_property_management_bp
     from app.routes.api.rental.property_view import property_view_bp
     from app.routes.api.rental.property_management import api_rent_property_management_bp as api_rent_property_management_bp
@@ -70,6 +71,7 @@ def create_app():
     app.register_blueprint(auth_bp, url_prefix='/auth')
     app.register_blueprint(flash_message_bp, url_prefix='/api/v1')
     app.register_blueprint(index_bp)
+    app.register_blueprint(seller_register_bp)
     app.register_blueprint(rent_property_management_bp, url_prefix='/rental/management')
     app.register_blueprint(property_view_bp, url_prefix='/rental')
     app.register_blueprint(api_rent_property_management_bp, url_prefix='/api/v1/rental/management')

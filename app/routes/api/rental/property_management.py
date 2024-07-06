@@ -1,7 +1,7 @@
 # app/routes/rental/property_management.py
 import asyncio
 from flask import Blueprint, request, session, flash, jsonify, redirect, url_for
-from app.utils.auth_utils import login_required
+from app.utils.auth_utils import login_required, seller_required
 from app.utils.property.property_management import (
     create_negotiation,
     create_rent_includes,
@@ -14,6 +14,7 @@ api_rent_property_management_bp = Blueprint('api_rent_property_management', __na
 
 @api_rent_property_management_bp.route('/new', methods=['POST'])
 @login_required
+@seller_required
 def create_property():
     try:
         print("Creating property")
@@ -30,13 +31,14 @@ def create_property():
 
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
-        generated_fields, rooms = loop.run_until_complete(generate_tags_and_fields(base64s, data))
+        generated_fields, rooms, all_tags = loop.run_until_complete(generate_tags_and_fields(base64s, data))
 
-        rental_property = create_rental_property(data, landlord, negotiation, rent_includes, generated_fields, rooms, base64s)
+        rental_property = create_rental_property(data, landlord, negotiation, rent_includes, generated_fields, rooms,
+                                                 base64s, all_tags)
 
         print("Property created: ", rental_property.id)
         flash('租屋物件建立成功!', 'popup_success')
-        view_url = url_for('property_view.view_property') + f'/{str(rental_property.id)}'
+        view_url = url_for('property_view.view_property', uuid=str(rental_property.id))
         return jsonify({'success': True, 'uuid': str(rental_property.id),
                         'redirect_url': f'{view_url}'})
     except Exception as e:
