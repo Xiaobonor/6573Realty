@@ -1,204 +1,13 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-TW">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>租賃房產資訊填寫</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background-color: #f5f5f5;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-            box-sizing: border-box;
-        }
-
-        .container {
-            background: #ffffff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 1200px;
-            display: flex;
-            gap: 20px;
-        }
-
-        .left-column,
-        .right-column {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .container h2 {
-            text-align: center;
-            width: 100%;
-            margin-bottom: 20px;
-            color: #333;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            margin-bottom: 5px;
-            color: #555;
-        }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            transition: border-color 0.3s;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            border-color: #007aff;
-        }
-
-        .form-group input[required],
-        .form-group select[required],
-        .form-group textarea[required] {
-            border-color: #FFA07A;
-        }
-
-        .form-group .info {
-            font-size: 12px;
-            color: #888;
-        }
-
-        .form-actions {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-        .form-actions button {
-            background-color: #007aff;
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .form-actions button:hover {
-            background-color: #005bb5;
-        }
-
-        .alert {
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid transparent;
-            border-radius: 5px;
-            display: none;
-        }
-
-        .alert-success {
-            color: #155724;
-            background-color: #d4edda;
-            border-color: #c3e6cb;
-        }
-
-        .alert-error {
-            color: #721c24;
-            background-color: #f8d7da;
-            border-color: #f5c6cb;
-        }
-
-        .image-upload-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .image-upload-preview {
-            width: 100%;
-            max-width: 600px;
-            height: 400px;
-            background: #eaeaea;
-            border-radius: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 10px;
-            position: relative;
-        }
-
-        .image-upload-preview img {
-            max-width: 100%;
-            max-height: 100%;
-            border-radius: 10px;
-        }
-
-        .image-upload-controls {
-            display: flex;
-            gap: 10px;
-        }
-
-        .image-upload-controls button {
-            background-color: #007aff;
-            color: #fff;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .image-upload-controls button:hover {
-            background-color: #005bb5;
-        }
-
-        .image-upload-controls button i {
-            margin-right: 5px;
-        }
-
-        .remove-image-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(0, 0, 0, 0.5);
-            color: #fff;
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            width: 30px;
-            height: 30px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: background-color 0.3s;
-        }
-
-        .remove-image-btn:hover {
-            background: rgba(0, 0, 0, 0.7);
-        }
-
-        .negotiation-price,
-        .additional-fee,
-        .internet-speed {
-            display: none;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='/property_management/rental/style.css') }}">
 </head>
-
 <body>
     <div class="container">
         <div id="alert-success" class="alert alert-success">提交成功！</div>
@@ -206,35 +15,40 @@
         <div class="left-column">
             <form id="property-form">
                 <div class="form-group">
-                    <label for="name">名稱 *</label>
-                    <input type="text" id="name" name="name" value="範例房產名稱" required>
+                    <label for="name">名稱</label>
+                    <input type="text" id="name" name="name">
+                    <div class="info">不填寫則由AI自動生成</div>
                 </div>
                 <div class="form-group">
                     <label for="description">簡述</label>
-                    <input type="text" id="description" name="description" value="這是一個範例描述">
+                    <input type="text" id="description" name="description">
                     <div class="info">不填寫則由AI自動生成</div>
                 </div>
                 <div class="form-group">
                     <label for="detailed_description">詳細描述</label>
-                    <textarea id="detailed_description" name="detailed_description" rows="4">這是一個範例的詳細描述</textarea>
+                    <textarea id="detailed_description" name="detailed_description" rows="4"></textarea>
                     <div class="info">不填寫則由AI自動生成</div>
                 </div>
                 <div class="form-group">
                     <label for="area">坪數 *</label>
-                    <input type="number" id="area" name="area" value="10" required>
+                    <input type="number" id="area" name="area required>
                 </div>
                 <div class="form-group">
                     <label for="address">地址 *</label>
-                    <input type="text" id="address" name="address" value="範例地址 123號" required>
+                    <input type="text" id="address" name="address" required>
                 </div>
                 <div class="form-group">
                     <label for="floor_info">樓層資訊 *</label>
-                    <input type="text" id="floor_info" name="floor_info" value="3/5" required>
+                    <input type="text" id="floor_info" name="floor_info" required>
                     <div class="info">例如: "3/5" 表示五層樓中的第三層</div>
                 </div>
                 <div class="form-group">
                     <label for="rent_price">租金價格 *</label>
-                    <input type="number" id="rent_price" name="rent_price" value="1000" required>
+                    <input type="number" id="rent_price" name="rent_price" required>
+                </div>
+                <div class="form-group">
+                    <label for="deposit">押金價格 *</label>
+                    <input type="number" id="deposit" name="deposit" required>
                 </div>
                 <div class="form-group">
                     <label for="negotiation">議價 *</label>
@@ -252,16 +66,16 @@
                 <div class="form-group">
                     <label for="property_type">房產類型 *</label>
                     <select id="property_type" name="property_type" required>
-                        <option value="entire_home" selected>整層住家</option>
-                        <option value="studio">獨立套房</option>
+                        <option value="studio" selected>獨立套房</option>
+                        <option value="entire_home">整層住家</option>
                         <option value="shared_room">雅房</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="layout">房型 *</label>
                     <select id="layout" name="layout" required>
-                        <option value="1_room">一室</option>
-                        <option value="2_rooms" selected>兩室</option>
+                        <option value="1_room" selected>一室</option>
+                        <option value="2_rooms">兩室</option>
                         <option value="3_rooms">三室</option>
                         <option value="4_rooms">四室</option>
                     </select>
@@ -269,50 +83,11 @@
                 <div class="form-group">
                     <label for="building_type">建築類型 *</label>
                     <select id="building_type" name="building_type" required>
-                        <option value="apartment" selected>公寓</option>
-                        <option value="elevator_building">電梯大樓</option>
+                        <option value="elevator_building" selected>電梯大樓</option>
+                        <option value="apartment">公寓</option>
                         <option value="townhouse">透天厝</option>
                         <option value="villa">別墅</option>
                     </select>
-                </div>
-                <div class="form-group">
-                    <label for="furniture">家具</label>
-                    <select id="furniture" name="furniture" multiple>
-                        <option value="sofa">沙發</option>
-                        <option value="bed">床</option>
-                        <option value="desk_chair">桌椅</option>
-                        <option value="dining_table">餐桌</option>
-                        <option value="wardrobe">衣櫃</option>
-                        <option value="bookshelf">書架</option>
-                        <option value="tv_stand">電視櫃</option>
-                        <option value="nightstand">床頭櫃</option>
-                        <option value="dresser">梳妝台</option>
-                        <option value="shoe_rack">鞋架</option>
-                    </select>
-                    <div class="info">不填寫則由AI自動生成</div>
-                </div>
-                <div class="form-group">
-                    <label for="amenities">便利設施</label>
-                    <select id="amenities" name="amenities" multiple>
-                        <option value="wifi">Wi-Fi分享器</option>
-                        <option value="washing_machine">洗衣機</option>
-                        <option value="refrigerator">冰箱</option>
-                        <option value="water_heater">熱水器</option>
-                        <option value="microwave">微波爐</option>
-                        <option value="air_conditioner">冷氣</option>
-                        <option value="heater">暖氣</option>
-                        <option value="tv">電視</option>
-                        <option value="dishwasher">洗碗機</option>
-                        <option value="oven">烤箱</option>
-                        <option value="fan">電風扇</option>
-                        <option value="cooker_hood">油煙機</option>
-                        <option value="water_purifier">淨水器</option>
-                        <option value="air_purifier">空氣清淨機</option>
-                        <option value="fire_extinguisher">滅火器</option>
-                        <option value="smoke_detector">煙霧探測器</option>
-                        <option value="electric_stove">電磁爐</option>
-                    </select>
-                    <div class="info">不填寫則由AI自動生成</div>
                 </div>
                 <div class="form-group">
                     <label for="electric">包含電費 *</label>
@@ -322,7 +97,7 @@
                     </select>
                     <div class="additional-fee" style="display: block;">
                         <label for="electric_price_per_unit">電費單價 (每單位)</label>
-                        <input type="number" id="electric_price_per_unit" name="electric_price_per_unit" value="0">
+                        <input type="number" id="electric_price_per_unit" name="electric_price_per_unit" value="6">
                     </div>
                 </div>
                 <div class="form-group">
@@ -365,59 +140,12 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="features">特色 *</label>
-                    <select id="features" name="features" multiple required>
-                        <option value="allow_cooking">可開伙</option>
-                        <option value="allow_cats">可養貓</option>
-                        <option value="allow_dogs">可養狗</option>
-                        <option value="allow_other_pets">可養其他寵物</option>
-                        <option value="dry_wet_separation">乾濕分離</option>
-                        <option value="mother_son_parking">子母車</option>
-                        <option value="water_dispenser">飲水機</option>
-                        <option value="surveillance">監視器</option>
-                        <option value="elevator">電梯</option>
-                        <option value="access_control">門禁磁扣</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="decoration_style">裝修風格</label>
-                    <input type="text" id="decoration_style" name="decoration_style" value="現代">
-                    <div class="info">不填寫則由AI自動生成</div>
-                </div>
-                <div class="form-group">
-                    <label for="tenant_preferences">租客偏好 *</label>
-                    <select id="tenant_preferences" name="tenant_preferences" multiple required>
-                        <option value="male_only">僅限男性</option>
-                        <option value="female_only">僅限女性</option>
-                        <option value="no_night_life">不接受夜生活</option>
-                        <option value="students_only" selected>僅限學生</option>
-                        <option value="working_professionals_only">僅限職業人士</option>
-                        <option value="others">其他</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="community">社區 *</label>
-                    <input type="text" id="community" name="community" value="範例社區" required>
+                    <label for="community">社區</label>
+                    <input type="text" id="community" name="community">
                 </div>
                 <div class="form-group">
                     <label for="min_lease_months">最短租期(月) *</label>
-                    <input type="number" id="min_lease_months" name="min_lease_months" value="6" required>
-                </div>
-                <div class="form-group">
-                    <label for="has_balcony">是否有陽台</label>
-                    <select id="has_balcony" name="has_balcony">
-                        <option value="true" selected>有</option>
-                        <option value="false">無</option>
-                    </select>
-                    <div class="info">不填寫則由AI自動生成</div>
-                </div>
-                <div class="form-group">
-                    <label for="bathroom_info">浴室資訊(可選)</label>
-                    <input type="text" id="bathroom_info" name="bathroom_info" value="一個浴室">
-                </div>
-                <div class="form-group">
-                    <label for="building_age">建築年齡(可選)</label>
-                    <input type="number" id="building_age" name="building_age" value="5">
+                    <input type="number" id="min_lease_months" name="min_lease_months" value="12" required>
                 </div>
                 <div class="form-actions">
                     <button type="submit">
@@ -428,9 +156,11 @@
         </div>
         <div class="right-column">
             <div class="image-upload-container">
-                <div class="image-upload-preview">
-                    <img id="current-image" src="" alt="目前上傳的圖片">
-                    <button class="remove-image-btn" onclick="removeImage()"><i class="fas fa-times"></i></button>
+                <div class="image-upload-preview" id="image-upload-preview" ondrop="handleDrop(event)" ondragover="handleDragOver(event)">
+                    <img id="current-image" src="" alt="目前上傳的圖片" style="display: none;">
+                    <button class="remove-image-btn" onclick="removeImage()" style="display: none;"><i class="fas fa-times"></i></button>
+                    <input type="file" id="images" name="images" multiple required style="display:none;" onchange="handleFiles(this.files)">
+                    <label for="images" class="upload-label" id="upload_text">點擊或拖曳圖片到此處上傳</label>
                 </div>
                 <div class="image-upload-controls">
                     <button id="prev-image" onclick="prevImage()"><i class="fas fa-chevron-left"></i> 前一張</button>
@@ -438,206 +168,89 @@
                 </div>
             </div>
             <div class="form-group">
-                <label for="images">圖片 *</label>
-                <input type="file" id="images" name="images" multiple required>
+                <label for="has_balcony">是否有陽台</label>
+                <select id="has_balcony" name="has_balcony">
+                    <option value="true">有</option>
+                    <option value="false" selected>無</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="building_age">建築年齡(可選)</label>
+                <input type="number" id="building_age" name="building_age">
+            </div>
+            <div class="form-group">
+                <label for="decoration_style">裝修風格</label>
+                <input type="text" id="decoration_style" name="decoration_style">
+                <div class="info">不填寫則由AI自動判別</div>
+            </div>
+            <div class="form-group">
+                <label for="features">特色 *</label>
+                <select id="features" name="features" multiple required>
+                    <option value="allow_cooking">可開伙</option>
+                    <option value="allow_cats">可養貓</option>
+                    <option value="allow_dogs">可養狗</option>
+                    <option value="allow_other_pets">可養其他寵物</option>
+                    <option value="dry_wet_separation">乾濕分離</option>
+                    <option value="mother_son_parking">子母車</option>
+                    <option value="water_dispenser">飲水機</option>
+                    <option value="surveillance">監視器</option>
+                    <option value="elevator">電梯</option>
+                    <option value="access_control">門禁磁扣</option>
+                </select>
+                <div class="info" style="color: red;">此選項不支援AI自動標記</div>
+            </div>
+           <div class="form-group">
+                <label for="furniture">家具</label>
+                <select id="furniture" name="furniture" multiple>
+                    <option value="sofa">沙發</option>
+                    <option value="bed">床</option>
+                    <option value="desk_chair">桌椅</option>
+                    <option value="dining_table">餐桌</option>
+                    <option value="wardrobe">衣櫃</option>
+                    <option value="bookshelf">書架</option>
+                    <option value="tv_stand">電視櫃</option>
+                    <option value="nightstand">床頭櫃</option>
+                    <option value="dresser">梳妝台</option>
+                    <option value="shoe_rack">鞋架</option>
+                </select>
+                <div class="info">不填寫則由AI自動標記</div>
+            </div>
+            <div class="form-group">
+                <label for="amenities">便利設施</label>
+                <select id="amenities" name="amenities" multiple>
+                    <option value="wifi">Wi-Fi分享器</option>
+                    <option value="washing_machine">洗衣機</option>
+                    <option value="refrigerator">冰箱</option>
+                    <option value="water_heater">熱水器</option>
+                    <option value="microwave">微波爐</option>
+                    <option value="air_conditioner">冷氣</option>
+                    <option value="heater">暖氣</option>
+                    <option value="tv">電視</option>
+                    <option value="dishwasher">洗碗機</option>
+                    <option value="oven">烤箱</option>
+                    <option value="fan">電風扇</option>
+                    <option value="cooker_hood">油煙機</option>
+                    <option value="water_purifier">淨水器</option>
+                    <option value="air_purifier">空氣清淨機</option>
+                    <option value="fire_extinguisher">滅火器</option>
+                    <option value="smoke_detector">煙霧探測器</option>
+                    <option value="electric_stove">電磁爐</option>
+                </select>
+                <div class="info">不填寫則由AI自動標記</div>
+            </div>
+            <div class="form-group">
+                <label for="tenant_preferences">租客限制</label>
+                <select id="tenant_preferences" name="tenant_preferences" multiple>
+                    <option value="male_only">僅限男性</option>
+                    <option value="female_only">僅限女性</option>
+                    <option value="no_night_life">不接受夜生活</option>
+                    <option value="students_only">僅限學生</option>
+                    <option value="working_professionals_only">僅限職業人士</option>
+                </select>
+                <div class="info">不填寫則預設不限制</div>
             </div>
         </div>
     </div>
-    <script>
-        const collapsibleHeaders = document.querySelectorAll('.collapsible .collapsible-header');
-        collapsibleHeaders.forEach(header => {
-            header.addEventListener('click', () => {
-                const content = header.nextElementSibling;
-                const icon = header.querySelector('i');
-                if (content.style.display === 'block') {
-                    content.style.display = 'none';
-                    icon.classList.remove('fa-chevron-up');
-                    icon.classList.add('fa-chevron-down');
-                } else {
-                    content.style.display = 'block';
-                    icon.classList.remove('fa-chevron-down');
-                    icon.classList.add('fa-chevron-up');
-                }
-            });
-        });
-
-        let currentImageIndex = 0;
-        let imageFiles = [];
-
-        document.getElementById('images').addEventListener('change', function (event) {
-            imageFiles = Array.from(event.target.files);
-            if (imageFiles.length > 0) {
-                displayImage(0);
-            }
-        });
-
-        function displayImage(index) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                document.getElementById('current-image').src = e.target.result;
-            }
-            reader.readAsDataURL(imageFiles[index]);
-            currentImageIndex = index;
-        }
-
-        function prevImage() {
-            if (currentImageIndex > 0) {
-                displayImage(currentImageIndex - 1);
-            }
-        }
-
-        function nextImage() {
-            if (currentImageIndex < imageFiles.length - 1) {
-                displayImage(currentImageIndex + 1);
-            }
-        }
-
-        function removeImage() {
-            imageFiles.splice(currentImageIndex, 1);
-            if (imageFiles.length > 0) {
-                if (currentImageIndex === imageFiles.length) {
-                    currentImageIndex--;
-                }
-                displayImage(currentImageIndex);
-            } else {
-                document.getElementById('current-image').src = '';
-            }
-        }
-
-        document.querySelectorAll('select').forEach(select => {
-            select.addEventListener('change', function () {
-                const parent = this.closest('.form-group');
-                if (this.id === 'electric' || this.id === 'water' || this.id === 'management_fee' || this.id === 'internet') {
-                    if (this.value === 'false') {
-                        parent.querySelector('.additional-fee').style.display = 'block';
-                    } else {
-                        parent.querySelector('.additional-fee').style.display = 'none';
-                    }
-                } else if (this.id === 'negotiation') {
-                    if (this.value === 'true') {
-                        parent.querySelector('.negotiation-price').style.display = 'block';
-                    } else {
-                        parent.querySelector('.negotiation-price').style.display = 'none';
-                    }
-                }
-            });
-        });
-
-        async function compressImage(file) {
-            const img = document.createElement("img");
-            const canvas = document.createElement("canvas");
-            const ctx = canvas.getContext("2d");
-
-            return new Promise((resolve, reject) => {
-                img.onload = () => {
-                    let width = img.width;
-                    let height = img.height;
-
-                    const max_size = 1024;
-                    if (width > height) {
-                        if (width > max_size) {
-                            height *= max_size / width;
-                            width = max_size;
-                        }
-                    } else {
-                        if (height > max_size) {
-                            width *= max_size / height;
-                            height = max_size;
-                        }
-                    }
-
-                    canvas.width = width;
-                    canvas.height = height;
-                    ctx.drawImage(img, 0, 0, width, height);
-                    canvas.toBlob((blob) => {
-                        resolve(blob);
-                    }, 'image/jpeg', 0.7);
-                };
-
-                img.onerror = (error) => {
-                    reject(error);
-                };
-
-                img.src = URL.createObjectURL(file);
-            });
-        }
-
-        function fileToBase64(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = () => resolve(reader.result);
-                reader.onerror = reject;
-                reader.readAsDataURL(file);
-            });
-        }
-
-        document.getElementById('property-form').addEventListener('submit', async function (event) {
-            event.preventDefault();
-
-            const formData = new FormData(this);
-            const alertSuccess = document.getElementById('alert-success');
-            const alertError = document.getElementById('alert-error');
-            const files = imageFiles;
-
-            try {
-                const compressedFilesPromises = files.map(async file => {
-                    if (file.size > 5 * 1024 * 1024) {
-                        const compressedBlob = await compressImage(file);
-                        return new File([compressedBlob], file.name, { type: 'image/jpeg' });
-                    }
-                    return file;
-                });
-
-                const compressedFiles = await Promise.all(compressedFilesPromises);
-
-                const base64FilesPromises = compressedFiles.map(file => fileToBase64(file));
-                const base64Files = await Promise.all(base64FilesPromises);
-
-                formData.delete('images');
-                base64Files.forEach((base64, index) => {
-                    formData.append('images', base64);
-                });
-
-                const response = await fetch('/api/v1/rent/management/new', {
-                    method: 'POST',
-                    body: formData
-                });
-
-                const result = await response.json();
-
-                if (result.success) {
-                    alertSuccess.textContent = '租屋物件建立成功!';
-                    alertSuccess.style.display = 'block';
-                    alertError.style.display = 'none';
-                    setTimeout(() => {
-                        window.location.href = result.redirect_url;
-                    }, 2000);
-                } else {
-                    alertError.textContent = `建立租屋物件時發生錯誤: ${result.error}`;
-                    alertError.style.display = 'block';
-                    alertSuccess.style.display = 'none';
-                }
-            } catch (error) {
-                alertError.textContent = `建立租屋物件時發生錯誤: ${error.message}`;
-                alertError.style.display = 'block';
-                alertSuccess.style.display = 'none';
-            }
-        });
-
-        document.querySelectorAll('select').forEach(select => {
-            const parent = select.closest('.form-group');
-            if (select.id === 'electric' || select.id === 'water' || select.id === 'management_fee' || select.id === 'internet') {
-                if (select.value === 'false') {
-                    parent.querySelector('.additional-fee').style.display = 'block';
-                } else {
-                    parent.querySelector('.additional-fee').style.display = 'none';
-                }
-            }
-            if (select.id === 'negotiation' && select.value === 'true') {
-                parent.querySelector('.negotiation-price').style.display = 'block';
-            }
-        });
-    </script>
+<script src="{{ url_for('static', filename='/property_management/rental/script.js') }}"></script>
 </body>
-
 </html>
