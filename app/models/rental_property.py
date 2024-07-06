@@ -1,4 +1,3 @@
-# app/models/rental_property.py
 from datetime import datetime
 from mongoengine import Document, StringField, UUIDField, ReferenceField, ListField, EmbeddedDocument, EmbeddedDocumentField, EmbeddedDocumentListField, IntField, FloatField, BooleanField, URLField, DateTimeField
 import uuid
@@ -13,16 +12,6 @@ class Negotiation(EmbeddedDocument):
 class Allowance(EmbeddedDocument):
     allow = BooleanField(required=True)
     additional_fee = FloatField(required=True)
-
-
-class RentIncludes(EmbeddedDocument):
-    electric = EmbeddedDocumentField(
-        EmbeddedDocumentField('Electric', required=True))
-    internet = EmbeddedDocumentField(
-        EmbeddedDocumentField('Internet', required=True))
-    water = EmbeddedDocumentField(EmbeddedDocumentField('Water', required=True))
-    management_fee = EmbeddedDocumentField(
-        EmbeddedDocumentField('ManagementFee', required=True))
 
 
 class Electric(EmbeddedDocument):
@@ -45,6 +34,13 @@ class Water(EmbeddedDocument):
 class ManagementFee(EmbeddedDocument):
     included = BooleanField(required=True)
     additional_fee = FloatField(required=True)
+
+
+class RentIncludes(EmbeddedDocument):
+    electric = EmbeddedDocumentField(Electric, required=True)
+    internet = EmbeddedDocumentField(Internet, required=True)
+    water = EmbeddedDocumentField(Water, required=True)
+    management_fee = EmbeddedDocumentField(ManagementFee, required=True)
 
 
 class Image(EmbeddedDocument):
