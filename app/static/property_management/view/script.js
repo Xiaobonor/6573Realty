@@ -1,5 +1,25 @@
-// app/static/property_management/view/script.js
 let currentImageIndex = 0;
+
+// 定義映射字典
+const propertyTypeDict = {
+    "studio": "獨立套房",
+    "entire_home": "整層住家",
+    "shared_room": "雅房"
+};
+
+const layoutDict = {
+    "1_room": "一室",
+    "2_rooms": "兩室",
+    "3_rooms": "三室",
+    "4_rooms": "四室"
+};
+
+const buildingTypeDict = {
+    "elevator_building": "電梯大樓",
+    "apartment": "公寓",
+    "townhouse": "透天厝",
+    "villa": "別墅"
+};
 
 document.getElementById('property-name').innerText = propertyData.name;
 document.getElementById('detailed-description').innerText = propertyData.detailed_description;
@@ -8,9 +28,9 @@ document.getElementById('address').innerText = propertyData.address;
 document.getElementById('floor-info').innerText = propertyData.floor_info;
 document.getElementById('rent-price').innerText = propertyData.rent_price + ' 元/月';
 document.getElementById('deposit').innerText = propertyData.deposit + ' 元';
-document.getElementById('property-type').innerText = propertyData.property_type;
-document.getElementById('layout').innerText = propertyData.layout;
-document.getElementById('building-type').innerText = propertyData.building_type;
+document.getElementById('property-type').innerText = propertyTypeDict[propertyData.property_type];
+document.getElementById('layout').innerText = layoutDict[propertyData.layout];
+document.getElementById('building-type').innerText = buildingTypeDict[propertyData.building_type];
 document.getElementById('area').innerText = propertyData.area + ' 坪';
 document.getElementById('decoration-style').innerText = propertyData.decoration_style;
 document.getElementById('min-lease-months').innerText = propertyData.min_lease_months + ' 個月';
