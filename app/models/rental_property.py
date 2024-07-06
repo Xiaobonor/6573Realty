@@ -9,11 +9,6 @@ class Negotiation(EmbeddedDocument):
     max_price = FloatField(required=True)
 
 
-class Allowance(EmbeddedDocument):
-    allow = BooleanField(required=True)
-    additional_fee = FloatField(required=True)
-
-
 class Electric(EmbeddedDocument):
     tai_power = BooleanField(required=True)
     price_per_unit = FloatField(required=True)
@@ -93,10 +88,16 @@ class RentalProperty(Document):
     building_type = StringField(choices=['apartment', 'elevator_building', 'townhouse', 'villa'], required=True)
 
     # Area
-    furniture = ListField(StringField(), required=True)
-    amenities = ListField(StringField(), required=True)
+    furniture = ListField(StringField(choices=[
+        'sofa', 'bed', 'desk_chair', 'dining_table', 'wardrobe', 'bookshelf',
+        'tv_stand', 'nightstand', 'dresser', 'shoe_rack'
+    ]), required=True)
+    amenities = ListField(StringField(choices=[
+        'wifi', 'washing_machine', 'refrigerator', 'water_heater', 'microwave', 'air_conditioner',
+        'heater', 'tv', 'dishwasher', 'oven', 'fan', 'cooker_hood', 'water_purifier',
+        'air_purifier', 'fire_extinguisher', 'smoke_detector', 'electric_stove'
+    ]), required=True)
     rent_includes = EmbeddedDocumentField(RentIncludes, required=True)
-    allowances = EmbeddedDocumentListField(Allowance, required=True)
     features = ListField(StringField(required=True))
     # features = ListField(StringField(choices=['allow_cooking', 'allow_pets', 'balcony']), required=True)
     decoration_style = StringField(required=True)
@@ -125,7 +126,7 @@ class RentalProperty(Document):
 
     @classmethod
     def create(cls, name, description, detailed_description, landlord, furniture, amenities, address, floor_info,
-               rent_price, negotiation, property_type, layout, allowances, features, building_type, area, rent_includes,
+               rent_price, negotiation, property_type, layout, features, building_type, area, rent_includes,
                decoration_style, tenant_preferences, community, min_lease_months, has_balcony, images, rooms,
                bathroom_info=None, building_age=None, display_tags=None):
         rental_property = cls(
@@ -141,7 +142,6 @@ class RentalProperty(Document):
             negotiation=negotiation,
             property_type=property_type,
             layout=layout,
-            allowances=allowances,
             features=features,
             building_type=building_type,
             area=area,
