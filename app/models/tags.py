@@ -9,6 +9,13 @@ class Tag(Document):
     meta = {'collection': 'tags'}
 
     @classmethod
+    def get_all_related_tags(cls, name):
+        tag = cls.objects(name=name).first()
+        if not tag:
+            return []
+        return tag.related_tags
+
+    @classmethod
     def get_or_create_tag_by_name(cls, name):
         tag = cls.objects(name=name).first()
         if not tag:

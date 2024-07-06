@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>房屋展示</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        .header {
+            text-align: center;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .title-container {
+            text-align: center;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            max-width: 1200px;
+            margin: 20px auto;
+        }
+
+        .content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            padding: 20px;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .image-gallery {
+            flex: 1;
+            max-width: 60%;
+            margin: 10px;
+            position: relative;
+            max-height: 500px;
+            overflow: hidden;
+        }
+
+        .image-gallery img {
+            width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .image-gallery .left,
+        .image-gallery .right {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .image-gallery .left {
+            left: 0;
+        }
+
+        .image-gallery .right {
+            right: 0;
+        }
+
+        .image-gallery .dots {
+            text-align: center;
+            margin-top: 10px;
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+        }
+
+        .image-gallery .dots span {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: #bbb;
+            margin: 5px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .image-gallery .dots .active {
+            background: #007bff;
+        }
+
+        .details {
+            flex: 1;
+            max-width: 35%;
+            margin: 10px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .details h2 {
+            margin-top: 0;
+            font-size: 24px;
+            color: #333;
+        }
+
+        .details p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .info-grid div {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .info-grid div h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+
+        .info-grid div p {
+            margin: 0;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .icon-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .icon-list .icon-item {
+            flex: 1 1 20%;
+            text-align: center;
+        }
+
+        .icon-list .icon-item i {
+            font-size: 24px;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .icon-list .icon-item span {
+            font-size: 14px;
+        }
+
+        .furniture-container,
+        .amenities-container {
+            margin: 20px 0;
+            max-width: 100%;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1 id="property-name"></h1>
+    </div>
+
+    <div class="content">
+        <div class="image-gallery" id="image-gallery">
+            <div class="left" onclick="prevImage()">❮</div>
+            <div class="right" onclick="nextImage()">❯</div>
+            <div class="dots" id="dots"></div>
+        </div>
+
+        <div class="details">
+            <h2>物件詳述</h2>
+            <p id="detailed-description"></p>
+            <h2>出租人</h2>
+            <p id="landlord"></p>
+
+            <div class="info-grid">
+                <div>
+                    <h3>地址</h3>
+                    <p id="address"></p>
+                </div>
+                <div>
+                    <h3>樓層</h3>
+                    <p id="floor-info"></p>
+                </div>
+                <div>
+                    <h3>月租金</h3>
+                    <p id="rent-price"></p>
+                </div>
+                <div>
+                    <h3>押金</h3>
+                    <p id="deposit"></p>
+                </div>
+                <div>
+                    <h3>物件類別</h3>
+                    <p id="property-type"></p>
+                </div>
+                <div>
+                    <h3>房間數</h3>
+                    <p id="layout"></p>
+                </div>
+                <div>
+                    <h3>建築類型</h3>
+                    <p id="building-type"></p>
+                </div>
+                <div>
+                    <h3>總坪數</h3>
+                    <p id="area"></p>
+                </div>
+                <div>
+                    <h3>裝潢風格</h3>
+                    <p id="decoration-style"></p>
+                </div>
+                <div>
+                    <h3>最少租期</h3>
+                    <p id="min-lease-months"></p>
+                </div>
+                <div>
+                    <h3>是否有陽台</h3>
+                    <p id="has-balcony"></p>
+                </div>
+                <div>
+                    <h3>累計瀏覽數</h3>
+                    <p id="view-count"></p>
+                </div>
+                <div>
+                    <h3>發布時間</h3>
+                    <p id="created-at"></p>
+                </div>
+                <div>
+                    <h3>最後更新時間</h3>
+                    <p id="last-updated-at"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="furniture-container">
+            <h2>家具</h2>
+            <div class="icon-list">
+                <div class="icon-item">
+                    <i class="fas fa-couch" id="sofa"></i>
+                    <span>沙發</span>
+                </div>
+                <div class="icon-item">
+                    <i class="fas fa-bed" id="bed"></i>
+                    <span>床</span>
+                </div>
+                <div class="icon-item">
+                    <i class="fas fa-chair" id="desk_chair"></i>
+                    <span>桌椅</span>
+                </div>
+                <div class="icon-item">
+                    <i class="fas fa-utensils" id="dining_table"></i>
+                    <span>餐桌</span>
+                </div>
+                <div class="icon-item">
+                    <i class="fas fa-boxes" id="wardrobe"></i>
+                    <span>衣櫃</span>
+                </div>
+                <div class="icon-item">
+                    <i class="fas fa-book" id="bookshelf"></i>
+                    <span>書架</span>
+                </div>
+                <div class="icon-item">
+                    <i class="fas fa-tv" id="tv_stand"></i>
+                    <span>電視櫃</span>
+                </div>
+                <div class="icon-item">
+                    <i class="fas fa-bed" id="nightstand"></i>
+                    <span>床頭櫃</span>
+                </div>
+                <div class="icon-item">
+                    <i class="fas fa-magic" id="dresser"></i>
+                    <span>化妝台</span>
+                </div>
+                <div class="icon-item">
+                    <i class="fas fa-shoe-prints" id="shoe_rack"></i>
+                    <span>鞋架</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="amenities-container">
+            <h2>設備</h2>
+            <div class="icon-list">
+                <div class="icon-item">
+                    <i class="fas fa-wifi" id="wifi"></i>
+                    <span>Wi-Fi</span>
+                </div>
+                <div class="icon-item">
+                    <i class="fas fa-tint" id="washing_machine"></i>
+                    <span>洗衣機</span>
+                </div>
+                <div class="icon-item">
+                    <i class="fas fa-snowflake" id="refrigerator"></i>
+                    <span>冰箱</span>
+                </div>
+                <div class="icon-item">
+                    <i class="fas fa-water" id="water_heater"></i>
+                    <span>熱水器</span>
+                </div>
+                <div class="icon-item">
+                    <i class="fas fa-microchip" id="microwave"></i>
+                    <span>微波爐</span>
+                </div>
+                <div class="icon-item">
+                    <i class="fas fa-wind" id="air_conditioner"></i>
+                    <span>冷氣</span>
+                </div>
+                <div class="icon-item">
+                    <i class="fas fa-fire" id="heater"></i>
+                    <span>暖氣</span>
+                </div>
+                <div class="icon-item">
+                    <i class="fas fa-tv" id="tv"></i>
+                    <span>電視</span>
+                </div>
+                <div class="icon-item">
+                    <i class="fas fa-utensils" id="dishwasher"></i>
+                    <span>洗碗機</span>
+                </div>
+                <div class="icon-item">
+                    <i class="fas fa-temperature-high" id="oven"></i>
+                    <span>烤箱</span>
+                </div>
+                <div class="icon-item">
+                    <i class="fas fa-fan" id="fan"></i>
+                    <span>風扇</span>
+                </div>
+                <div class="icon-item">
+                    <i class="fas fa-wind" id="cooker_hood"></i>
+                    <span>排油煙機</span>
+                </div>
+                <div class="icon-item">
+                    <i class="fas fa-water" id="water_purifier"></i>
+                    <span>濾水器</span>
+                </div>
+                <div class="icon-item">
+                    <i class="fas fa-air-freshener" id="air_purifier"></i>
+                    <span>空氣清淨機</span>
+                </div>
+                <div class="icon-item">
+                    <i class="fas fa-fire-extinguisher" id="fire_extinguisher"></i>
+                    <span>滅火器</span>
+                </div>
+                <div class="icon-item">
+                    <i class="fas fa-bell" id="smoke_detector"></i>
+                    <span>煙霧偵測器</span>
+                </div>
+                <div class="icon-item">
+                    <i class="fas fa-burn" id="electric_stove"></i>
+                    <span>電磁爐</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const propertyData = {{ property_data | tojson }};
+
+        let currentImageIndex = 0;
+
+        document.getElementById('property-name').innerText = propertyData.name;
+        document.getElementById('detailed-description').innerText = propertyData.detailed_description;
+        document.getElementById('landlord').innerText = propertyData.landlord;
+        document.getElementById('address').innerText = propertyData.address;
+        document.getElementById('floor-info').innerText = propertyData.floor_info;
+        document.getElementById('rent-price').innerText = propertyData.rent_price + ' 元/月';
+        document.getElementById('deposit').innerText = propertyData.deposit + ' 元';
+        document.getElementById('property-type').innerText = propertyData.property_type;
+        document.getElementById('layout').innerText = propertyData.layout;
+        document.getElementById('building-type').innerText = propertyData.building_type;
+        document.getElementById('area').innerText = propertyData.area + ' 坪';
+        document.getElementById('decoration-style').innerText = propertyData.decoration_style;
+        document.getElementById('min-lease-months').innerText = propertyData.min_lease_months + ' 個月';
+        document.getElementById('has-balcony').innerText = propertyData.has_balcony ? '是' : '否';
+        document.getElementById('view-count').innerText = propertyData.view_count + ' 次';
+        document.getElementById('created-at').innerText = new Date(propertyData.created_at).toLocaleString('zh-TW');
+        document.getElementById('last-updated-at').innerText = new Date(propertyData.last_updated_at).toLocaleString('zh-TW');
+
+        const imageGallery = document.getElementById('image-gallery');
+        const dots = document.getElementById('dots');
+        propertyData.images.forEach((base64Image, index) => {
+            const img = document.createElement('img');
+            img.src = base64Image;
+            img.style.display = index === 0 ? 'block' : 'none';
+            imageGallery.appendChild(img);
+
+            const dot = document.createElement('span');
+            dot.className = index === 0 ? 'active' : '';
+            dot.onclick = () => showImage(index);
+            dots.appendChild(dot);
+        });
+
+        function showImage(index) {
+            const images = imageGallery.querySelectorAll('img');
+            const dotElements = dots.querySelectorAll('span');
+            images[currentImageIndex].style.display = 'none';
+            dotElements[currentImageIndex].classList.remove('active');
+            images[index].style.display = 'block';
+            dotElements[index].classList.add('active');
+            currentImageIndex = index;
+        }
+
+        function prevImage() {
+            const newIndex = (currentImageIndex - 1 + propertyData.images.length) % propertyData.images.length;
+            showImage(newIndex);
+        }
+
+        function nextImage() {
+            const newIndex = (currentImageIndex + 1) % propertyData.images.length;
+            showImage(newIndex);
+        }
+
+        function updateIconAvailability(items, itemType) {
+            items.forEach(item => {
+                document.getElementById(item).style.color = '#000';
+            });
+
+            const allItems = {
+                furniture: ['sofa', 'bed', 'desk_chair', 'dining_table', 'wardrobe', 'bookshelf', 'tv_stand', 'nightstand', 'dresser', 'shoe_rack'],
+                amenities: ['wifi', 'washing_machine', 'refrigerator', 'water_heater', 'microwave', 'air_conditioner', 'heater', 'tv', 'dishwasher', 'oven', 'fan', 'cooker_hood', 'water_purifier', 'air_purifier', 'fire_extinguisher', 'smoke_detector', 'electric_stove']
+            };
+
+            allItems[itemType].forEach(item => {
+                if (!items.includes(item)) {
+                    document.getElementById(item).style.color = '#ccc';
+                }
+            });
+        }
+
+        updateIconAvailability(propertyData.furniture, 'furniture');
+        updateIconAvailability(propertyData.amenities, 'amenities');
+    </script>
+
+</body>
+
+</html>
