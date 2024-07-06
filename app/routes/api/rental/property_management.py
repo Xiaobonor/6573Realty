@@ -5,6 +5,7 @@ from app.utils.auth_utils import login_required
 from app.models.rental_property import (RentalProperty, Negotiation, RentIncludes, Electric, Internet, Water,
                                         ManagementFee, Room, RoomTags)
 from app.utils.agents.chat.image_tag import image_tag
+from app.utils.agents.chat.tag_fields_generated import tag_fields_generated
 
 api_rent_property_management_bp = Blueprint('api_rent_property_management', __name__)
 
@@ -76,13 +77,29 @@ def create_property():
                 )
                 rooms.append(room)
 
+        generated_fields = {}
+        required_fields = {
+            'description': '簡述',
+            'detailed_description': '詳細描述',
+            'furniture': '家具',
+            'amenities': '便利設施',
+            'decoration_style': '裝修風格'
+        }
+
+        for field, description in required_fields.items():
+            if not data.get(field) or data.get(field)[0] == '':
+                generated_text, usage = asyncio.run(tag_fields_generated(field, image_tag_data))
+                print(f"Generated {field}: {generated_text['field_output']}")
+                generated_fields[field] = generated_text['field_output']
+                print(f"Generated Done: {generated_fields.get(field)}")
+
         rental_property = RentalProperty.create(
             name=data['name'][0],
-            description=data['description'][0],
-            detailed_description=data['detailed_description'][0],
+            description=generated_fields.get('description') or data.get('description', [''])[0],
+            detailed_description=generated_fields.get('detailed_description') or data.get('detailed_description', [''])[0],
             landlord=landlord,
-            furniture=data.get('furniture', []),
-            amenities=data.get('amenities', []),
+            furniture=data.get('furniture', generated_fields.get('furniture', '').split(',')),
+            amenities=data.get('amenities', generated_fields.get('amenities', '').split(',')),
             address=data['address'][0],
             floor_info=data['floor_info'][0],
             rent_price=float(data['rent_price'][0]),
@@ -93,11 +110,11 @@ def create_property():
             building_type=data['building_type'][0],
             area=float(data['area'][0]),
             rent_includes=rent_includes,
-            decoration_style=data['decoration_style'][0],
+            decoration_style=generated_fields.get('decoration_style') or data.get('decoration_style', [''])[0],
             tenant_preferences=data.get('tenant_preferences', []),
             community=data['community'][0],
             min_lease_months=int(data['min_lease_months'][0]),
-            has_balcony=data['has_balcony'][0] == 'true',
+            has_balcony=data.get('has_balcony', [generated_fields.get('has_balcony', '')])[0] == 'true',
             images=base64s,
             rooms=rooms,
             bathroom_info=data.get('bathroom_info', [None])[0],

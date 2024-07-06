@@ -96,7 +96,7 @@ class RentalProperty(Document):
         'wifi', 'washing_machine', 'refrigerator', 'water_heater', 'microwave', 'air_conditioner',
         'heater', 'tv', 'dishwasher', 'oven', 'fan', 'cooker_hood', 'water_purifier',
         'air_purifier', 'fire_extinguisher', 'smoke_detector', 'electric_stove'
-    ]), required=True)
+    ]), required=False)
     rent_includes = EmbeddedDocumentField(RentIncludes, required=True)
     features = ListField(StringField(required=True))
     # features = ListField(StringField(choices=['allow_cooking', 'allow_pets', 'balcony']), required=True)
@@ -125,10 +125,10 @@ class RentalProperty(Document):
     meta = {'collection': 'rental_properties'}
 
     @classmethod
-    def create(cls, name, description, detailed_description, landlord, furniture, amenities, address, floor_info,
+    def create(cls, name, description, detailed_description, landlord, furniture, address, floor_info,
                rent_price, negotiation, property_type, layout, features, building_type, area, rent_includes,
                decoration_style, tenant_preferences, community, min_lease_months, has_balcony, images, rooms,
-               bathroom_info=None, building_age=None, display_tags=None):
+               bathroom_info=None, building_age=None, display_tags=None, amenities=None):
         rental_property = cls(
             name=name,
             description=description,
