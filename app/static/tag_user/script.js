@@ -3,6 +3,27 @@ let questions = [];
 let answers = {};
 let currentQuestion = null;
 
+const propertyTypeDict = {
+    "studio": "獨立套房",
+    "entire_home": "整層住家",
+    "shared_room": "雅房"
+};
+
+const layoutDict = {
+    "1_room": "一房",
+    "2_rooms": "兩房",
+    "3_rooms": "三房",
+    "4_rooms": "四房(以上)"
+};
+
+const buildingTypeDict = {
+    "elevator_building": "電梯大樓",
+    "apartment": "公寓",
+    "townhouse": "透天厝",
+    "villa": "別墅"
+};
+
+
 $(document).ready(function() {
     displayInitialQuestions();
 });
@@ -116,9 +137,18 @@ function displayNextQuestion() {
 
     if (currentQuestion.options && currentQuestion.options.length > 0) {
         currentQuestion.options.forEach(option => {
-            const optionDiv = $('<div>').addClass('option-card').text(option).click(async () => {
+            let displayText = option;
+            if (propertyTypeDict[option]) {
+                displayText = propertyTypeDict[option];
+            } else if (layoutDict[option]) {
+                displayText = layoutDict[option];
+            } else if (buildingTypeDict[option]) {
+                displayText = buildingTypeDict[option];
+            }
+
+            const optionDiv = $('<div>').addClass('option-card').text(displayText).click(async () => {
                 answers[currentQuestion.question] = option;
-                appendMessage(option, 'user');
+                appendMessage(displayText, 'user');
                 disablePreviousOptions();
                 if (questions.length === 0) {
                     await submitAnswers();

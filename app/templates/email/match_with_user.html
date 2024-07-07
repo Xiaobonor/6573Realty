@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新物件通知</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            padding: 20px;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 10px 10px 0 0;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .content {
+            padding: 20px;
+        }
+        .image-gallery {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .image-gallery img {
+            width: 100%;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+        .image-gallery img.active {
+            display: block;
+        }
+        .dots {
+            text-align: center;
+            margin-top: 10px;
+        }
+        .dots span {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: #bbb;
+            margin: 5px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .dots .active {
+            background: #007bff;
+        }
+        .property-info {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .property-info h2 {
+            margin: 0;
+            font-size: 20px;
+            color: #333;
+        }
+        .property-info p {
+            margin: 5px 0;
+            color: #666;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #f4f4f9;
+            border-radius: 0 0 10px 10px;
+        }
+        .footer a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .footer a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>新的出租物件通知</h1>
+        </div>
+        <div class="content">
+            <div class="image-gallery">
+                {% for image in property.images %}
+                <img src="https://6573.xiaobo.app/image/view/{{ property.uuid }}/{{ loop.index0 + 1 }}" class="{% if loop.first %}active{% endif %}" alt="物件圖片">
+                {% endfor %}
+            </div>
+            <div class="dots">
+                {% for image in property.images %}
+                <span class="{% if loop.first %}active{% endif %}" onclick="showImage({{ loop.index0 }})"></span>
+                {% endfor %}
+            </div>
+            <div class="property-info">
+                <h2>{{ property.name }}</h2>
+                <p>{{ property.description }}</p>
+                <p>地址: {{ property.address }}，樓層: {{ property.floor_info }}</p>
+                <p>月租金: {{ property.rent_price }} 元</p>
+            </div>
+        </div>
+        <div class="footer">
+            <a href="https://6573.xiaobo.app/rental/view/{{ property.uuid }}">查看詳細資訊</a>
+        </div>
+    </div>
+    <script>
+        let currentImageIndex = 0;
+        const images = document.querySelectorAll('.image-gallery img');
+        const dots = document.querySelectorAll('.dots span');
+
+        function showImage(index) {
+            images[currentImageIndex].classList.remove('active');
+            dots[currentImageIndex].classList.remove('active');
+            currentImageIndex = index;
+            images[currentImageIndex].classList.add('active');
+            dots[currentImageIndex].classList.add('active');
+        }
+    </script>
+</body>
+</html>
