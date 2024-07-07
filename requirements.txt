@@ -2,6 +2,7 @@ Flask[async]==3.0.3
 flask_socketio==5.3.6
 flask_session==0.8.0
 flask_cors==4.0.1
+flask_mailman==1.1.1
 
 openai==1.35.4
 python-dotenv==1.0.1

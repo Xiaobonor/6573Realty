@@ -1,3 +1,4 @@
+// app/static/property_management/view/script.js
 let currentImageIndex = 0;
 
 // 定義映射字典

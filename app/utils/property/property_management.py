@@ -1,4 +1,6 @@
 # app/utils/property/property_management.py
+from flask import render_template
+
 from app.models.rental_property import (Negotiation, RentIncludes, Electric, Internet, Water,
                                         ManagementFee, Room, RoomTags, RentalProperty)
 from app.models.tags import Tag
@@ -6,6 +8,7 @@ from app.models.user import User
 from app.utils.agents.chat.image_tag import image_tag
 from app.utils.agents.chat.tag_fields_generated import tag_fields_generated
 from app.utils.algorithm.tag_algorithm import remove_hash, get_bert_vectors, get_tfidf_vectors, calculate_similarity
+from app.utils.mail_sender import send_email
 
 
 def create_negotiation(data):
@@ -115,10 +118,8 @@ def create_rental_property(data, landlord, negotiation, rent_includes, generated
     tfidf_vectors = get_tfidf_vectors(all_tags)
 
     print("SStart matching with users")
-    match_with_users(bert_vectors, tfidf_vectors)
-    print("End matching with users")
-
-    return RentalProperty.create(
+    users = match_with_users(bert_vectors, tfidf_vectors)
+    property = RentalProperty.create(
         name=generated_fields.get('name') or data.get('name', [''])[0],
         description=generated_fields.get('description') or data.get('description', [''])[0],
         detailed_description=generated_fields.get('detailed_description') or data.get('detailed_description', [''])[0],
@@ -149,12 +150,17 @@ def create_rental_property(data, landlord, negotiation, rent_includes, generated
         building_age=int(data.get('building_age', [0])[0])
     )
 
+    for user in users:
+        send_email("有與您需求相符的房源！", user.email,
+                   "email/match_with_user.html", user=user, property=property)
+        print(f"Sent email to {user.email}")
+
+    return property
+
 
 def match_with_users(bert_vectors, tfidf_vectors):
     users = User.objects(find_rent_property=True)
-    best_match = None
-    highest_similarity = -1
-
+    user_similarity_scores = []
     print(f"Matching with {len(users)} users")
 
     for user in users:
@@ -166,10 +172,16 @@ def match_with_users(bert_vectors, tfidf_vectors):
             user.find_rent_property_detail.tfidf_vectors,
         )
         print(f"Similarity with {user.name}: {similarity}")
+        user_similarity_scores.append((user, similarity))
 
-        if similarity > highest_similarity:
-            highest_similarity = similarity
-            best_match = user
+    # Sort users by similarity score in descending order
+    user_similarity_scores.sort(key=lambda x: x[1], reverse=True)
 
-    if best_match:
-        print(f"Best matched user: {best_match.name} with similarity score: {highest_similarity}")
+    # Get the top 50% users
+    top_percent_index = int(len(user_similarity_scores) * 0.5)
+    best_match = [user for user, score in user_similarity_scores[:top_percent_index]]
+
+    for user, score in user_similarity_scores[:top_percent_index]:
+        print(f"Best matched user: {user.name} with similarity score: {score}")
+
+    return best_match
