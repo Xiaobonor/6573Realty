@@ -1,4 +1,3 @@
-<!-- app/templates/property_management/rental/view.html -->
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
@@ -10,15 +9,40 @@
 </head>
 <body>
     <div class="header">
-        <h1 id="property-name"></h1>
-    </div>
+        <div class="header-content">
+            <div class="logo-container">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="6573Realty" class="logo">
+                <span class="company-name">6573Realty</span>
+            </div>
+            <nav class="nav-menu">
+                <ul>
+                    <li><a href="#">首頁</a></li>
+                    <li><a href="#">買屋</a></li>
+                    <li><a href="#">租屋</a></li>
+                    <li><a href="#">房產快訊</a></li>
+                </ul>
+            </nav>
+            <div class="header-right">
+                <a href="#">註冊</a>
+                <a href="#">登入</a>
+                <div class="dropdown">
+                    <a href="#">我要刊登</a>
+                </div>
 
+                <i class="fas fa-bell"></i>
+            </div>
+        </div>
+    </div>
     <div class="content">
         <div class="main-section">
             <div class="image-gallery" id="image-gallery">
                 <div class="left" onclick="prevImage()">❮</div>
                 <div class="right" onclick="nextImage()">❯</div>
                 <div class="dots" id="dots"></div>
+            </div>
+
+            <div class="title-container">
+                <h1 id="property-name"></h1>
             </div>
 
             <div class="furniture-container">
@@ -140,7 +164,7 @@
 
             <h2>出租人</h2>
             <p id="landlord"></p>
-            <button onclick="contactLandlord()">聯繫出租人（Line）</button>
+            <button class="line-button" onclick="contactLandlord()">聯繫出租人（Line）</button>
 
             <div class="info-grid">
                 <div>
@@ -203,7 +227,7 @@
         </div>
     </div>
 
-    <script>
+     <script>
         const propertyData = {{ property_data | tojson }};
     </script>
     <script src="{{ url_for('static', filename='property_management/view/script.js') }}"></script>
