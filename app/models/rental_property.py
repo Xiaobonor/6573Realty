@@ -105,6 +105,7 @@ class RentalProperty(Document):
     decoration_style = StringField(required=True)
     images = ListField(StringField(), required=True)
     rooms = EmbeddedDocumentListField(Room, required=True)
+    allTags = ListField(StringField(), required=True)
     area = FloatField(required=True)
 
     # Other
@@ -135,7 +136,7 @@ class RentalProperty(Document):
 
     @classmethod
     def create(cls, name, description, detailed_description, landlord, address, floor_info,
-               rent_price, negotiation, property_type, layout, features, building_type, area, rent_includes,
+               rent_price, negotiation, property_type, layout, features, building_type, area, rent_includes, allTags,
                decoration_style, min_lease_months, has_balcony, images, rooms, deposit, bert_vectors, tfidf_vectors,
                building_age=None, display_tags=None, amenities=None, tenant_preferences=None, community=None, furniture=None):
         if amenities is None or amenities == "":
@@ -186,6 +187,7 @@ class RentalProperty(Document):
             display_tags=display_tags or [],
             images=images,
             rooms=rooms,
+            allTags=allTags,
             bert_vectors=bert_vectors,
             tfidf_vectors=tfidf_vectors
         )

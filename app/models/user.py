@@ -1,7 +1,7 @@
 # app/models/user.py
 from datetime import datetime
 from mongoengine import Document, StringField, URLField, EmailField, DateTimeField, BooleanField, EmbeddedDocument, \
-    IntField, EmbeddedDocumentField, ListField
+    IntField, EmbeddedDocumentField, ListField, FloatField
 
 
 class FindRentProperty(EmbeddedDocument):
@@ -12,6 +12,8 @@ class FindRentProperty(EmbeddedDocument):
     layout = ListField(choices=['1_room', '2_rooms', '3_rooms', '4_rooms'], required=True)
     building_type = ListField(choices=['apartment', 'elevator_building', 'townhouse', 'villa', 'N/A'], required=True)
     tags = ListField(required=True)
+    bert_vectors = ListField(ListField(FloatField()), required=True)
+    tfidf_vectors = ListField(ListField(FloatField()), required=True)
 
 
 class Sellers(EmbeddedDocument):

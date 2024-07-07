@@ -39,25 +39,49 @@ def get_tfidf_vectors(tags):
     return vectors.toarray()
 
 
-def calculate_similarity(house_tags, user_tags):
+def pad_vectors(vectors, target_dim):
+    """Pad or truncate vectors to match target dimensions."""
+    padded_vectors = []
+    for vec in vectors:
+        if len(vec) < target_dim:
+            padded_vec = np.pad(vec, (0, target_dim - len(vec)), 'constant')
+        else:
+            padded_vec = vec[:target_dim]
+        padded_vectors.append(padded_vec)
+    return np.array(padded_vectors)
+
+
+def calculate_similarity(bert_house_vectors, bert_user_vectors, tfidf_house_vectors, tfidf_user_vectors):
     """Calculate similarity between house tags and user tags."""
-    house_tags = remove_hash(house_tags)
-    user_tags = remove_hash(user_tags)
+    bert_house_vectors = np.array(bert_house_vectors)
+    bert_user_vectors = np.array(bert_user_vectors)
+    tfidf_house_vectors = np.array(tfidf_house_vectors)
+    tfidf_user_vectors = np.array(tfidf_user_vectors)
 
-    bert_house_vectors = get_bert_vectors(house_tags)
-    bert_user_vectors = get_bert_vectors(user_tags)
+    target_dim = max(
+        bert_house_vectors.shape[1] if bert_house_vectors.size > 0 else 0,
+        bert_user_vectors.shape[1] if bert_user_vectors.size > 0 else 0,
+        tfidf_house_vectors.shape[1] if tfidf_house_vectors.size > 0 else 0,
+        tfidf_user_vectors.shape[1] if tfidf_user_vectors.size > 0 else 0
+    )
 
-    tfidf_house_vectors = get_tfidf_vectors(house_tags)
-    tfidf_user_vectors = get_tfidf_vectors(user_tags)
+    if target_dim > 0:
+        # Pad vectors to the target dimension
+        bert_house_vectors = pad_vectors(bert_house_vectors, target_dim)
+        bert_user_vectors = pad_vectors(bert_user_vectors, target_dim)
+        tfidf_house_vectors = pad_vectors(tfidf_house_vectors, target_dim)
+        tfidf_user_vectors = pad_vectors(tfidf_user_vectors, target_dim)
 
-    bert_similarities = cosine_similarity(bert_house_vectors, bert_user_vectors)
-    tfidf_similarities = cosine_similarity(tfidf_house_vectors, tfidf_user_vectors)
+        bert_similarities = cosine_similarity(bert_house_vectors, bert_user_vectors)
+        tfidf_similarities = cosine_similarity(tfidf_house_vectors, tfidf_user_vectors)
 
-    # Merge BERT and TF-IDF similarities
-    fused_similarities = (bert_similarities + tfidf_similarities) / 2.0
+        fused_similarities = (bert_similarities + tfidf_similarities) / 2.0
+        avg_similarity = np.mean(fused_similarities)
+        print(f"Average Similarity: {avg_similarity}")
+    else:
+        avg_similarity = 0
+        print("No valid vectors found to calculate similarity.")
 
-    # Calculate the average similarity
-    avg_similarity = np.mean(fused_similarities)
     return avg_similarity
 
 
@@ -102,5 +126,5 @@ if __name__ == "__main__":
     print(new_user_tfidf_vectors)
 
     # Calculate similarity between new house tags and new user tags
-    similarity = calculate_similarity(new_house_tags, new_user_tags)
-    print(f"Similarity: {similarity}")
+    # similarity = calculate_similarity(new_house_tags, new_user_tags)
+    # print(f"Similarity: {similarity}")

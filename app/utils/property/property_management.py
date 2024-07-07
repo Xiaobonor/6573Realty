@@ -2,9 +2,10 @@
 from app.models.rental_property import (Negotiation, RentIncludes, Electric, Internet, Water,
                                         ManagementFee, Room, RoomTags, RentalProperty)
 from app.models.tags import Tag
+from app.models.user import User
 from app.utils.agents.chat.image_tag import image_tag
 from app.utils.agents.chat.tag_fields_generated import tag_fields_generated
-from app.utils.algorithm.tag_algorithm import remove_hash, get_bert_vectors, get_tfidf_vectors
+from app.utils.algorithm.tag_algorithm import remove_hash, get_bert_vectors, get_tfidf_vectors, calculate_similarity
 
 
 def create_negotiation(data):
@@ -113,6 +114,10 @@ def create_rental_property(data, landlord, negotiation, rent_includes, generated
     bert_vectors = get_bert_vectors(remove_hash(all_tags))
     tfidf_vectors = get_tfidf_vectors(all_tags)
 
+    print("SStart matching with users")
+    match_with_users(bert_vectors, tfidf_vectors)
+    print("End matching with users")
+
     return RentalProperty.create(
         name=generated_fields.get('name') or data.get('name', [''])[0],
         description=generated_fields.get('description') or data.get('description', [''])[0],
@@ -138,7 +143,33 @@ def create_rental_property(data, landlord, negotiation, rent_includes, generated
         has_balcony=data.get('has_balcony', [generated_fields.get('has_balcony', '')])[0] == 'true',
         images=base64s,
         rooms=rooms,
+        allTags=list(all_tags),
         bert_vectors=bert_vectors.tolist(),
         tfidf_vectors=tfidf_vectors.tolist(),
         building_age=int(data.get('building_age', [0])[0])
     )
+
+
+def match_with_users(bert_vectors, tfidf_vectors):
+    users = User.objects(find_rent_property=True)
+    best_match = None
+    highest_similarity = -1
+
+    print(f"Matching with {len(users)} users")
+
+    for user in users:
+        print(f"Matching with user: {user.name}")
+        similarity = calculate_similarity(
+            bert_vectors,
+            user.find_rent_property_detail.bert_vectors,
+            tfidf_vectors,
+            user.find_rent_property_detail.tfidf_vectors,
+        )
+        print(f"Similarity with {user.name}: {similarity}")
+
+        if similarity > highest_similarity:
+            highest_similarity = similarity
+            best_match = user
+
+    if best_match:
+        print(f"Best matched user: {best_match.name} with similarity score: {highest_similarity}")
