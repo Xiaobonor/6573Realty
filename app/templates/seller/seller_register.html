@@ -4,55 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Seller Registration</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='seller/style.css') }}">
 </head>
 <body>
 
     {% include 'partials/popup.html' %}
     {% include 'partials/notification.html' %}
 
-    <h2>Seller Registration</h2>
-    <form id="sellerForm">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" value="你是測試用賣家" required><br><br>
-        <label for="phone">Phone:</label>
-        <input type="text" id="phone" name="phone" value="09123456789" required><br><br>
-        <label for="line">Line:</label>
-        <input type="text" id="line" name="line" value="mencrp" required><br><br>
-        <label for="company">Company:</label>
-        <input type="text" id="company" name="company" value="第一大集團" required><br><br>
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" value="w@w.com" required><br><br>
-        <button type="submit">Register</button>
-    </form>
+    <div class="container">
+        <h2>Seller Registration</h2>
+        <form id="sellerForm">
+            <div class="input-group">
+                <i class="fa fa-user"></i>
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" value="你是測試用賣家" required>
+            </div>
+            <div class="input-group">
+                <i class="fa fa-phone"></i>
+                <label for="phone">Phone:</label>
+                <input type="text" id="phone" name="phone" value="09123456789" required>
+            </div>
+            <div class="input-group">
+                <i class="fa fa-comments"></i>
+                <label for="line">Line:</label>
+                <input type="text" id="line" name="line" value="mencrp" required>
+            </div>
+            <div class="input-group">
+                <i class="fa fa-building"></i>
+                <label for="company">Company:</label>
+                <input type="text" id="company" name="company" value="第一大集團" required>
+            </div>
+            <div class="input-group">
+                <i class="fa fa-envelope"></i>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" value="w@w.com" required>
+            </div>
+            <button type="submit"><i class="fa fa-paper-plane"></i> Register</button>
+        </form>
+    </div>
 
-    <script>
-        document.getElementById('sellerForm').addEventListener('submit', async function(event) {
-            event.preventDefault();
-
-            const data = {
-                name: document.getElementById('name').value,
-                phone: document.getElementById('phone').value,
-                line: document.getElementById('line').value,
-                company: document.getElementById('company').value,
-                email: document.getElementById('email').value
-            };
-
-            const response = await fetch('/api/v1/seller/register_seller', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            });
-
-            const result = await response.json();
-            if (response.ok) {
-                alert('Seller registered successfully');
-                window.location.href = '/';
-            } else {
-                alert(`Error: ${result.error}`);
-            }
-        });
-    </script>
+<script src="{{ url_for('static', filename='seller/script.js') }}"></script>
 </body>
 </html>
