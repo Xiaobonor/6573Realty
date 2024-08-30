@@ -4,7 +4,13 @@
 
 ### 🌐 Description
 
-wait.....
+6573 Realty is a rental search website enhanced by AI!
+Sellers (landlords or agents) can simply input the price, address, and public facilities, and upload photos. The AI will then generate corresponding titles, descriptions, and list the facilities in the house based on the photos. This makes it convenient and fast for landlords, saving them from spending a lot of time thinking about titles and inputting tedious information!
+
+For buyers, we use a tag mechanism. Each property has a set of tags that describe it. By combining these tags, we can accurately describe the property. Therefore, by obtaining the user's preferred tags and fitting the similarity between the user's preferences and the property's tags, we can achieve the best algorithmic results. This significantly reduces the time spent searching for a desired property, saving more than 90% of the time!
+65, 73? Why is it called 6573 Realty?
+
+Because in the ASCII table, A is 65 and I is 73. We hope to revolutionize the search method with AI!
 
 ### Quick Preview
 
@@ -25,7 +31,6 @@ Before deploying the app, make sure you have all the prerequisites installed and
 * Docker (optional)
 #### 🔑 APIs
 * OpenAI (or Azure OpenAI)
-* Azure (Bing Search API)
 * Google (OAuth)
 
 You can deploy the app using Docker or just setup self.
